@@ -49,6 +49,9 @@ The following options are added to TypeDoc when the plugin is installed:
   [plantuml server](http://www.plantuml.com/plantuml/). Default is `local`.
 * `--umlFormat <png|svg>`<br>
   Specifies the image format to use. Default is PNG.
+* `--umlAddClassDiagram <above|below>`<br>
+  Automatically creates a class diagram for every class and interface that has a comment. The class diagram is inserted
+  `above` or `below` the comment's text. It includes one level of base and sub classes.
 
 ### License
 
