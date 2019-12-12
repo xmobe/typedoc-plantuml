@@ -59,7 +59,7 @@ The following options are added to TypeDoc when the plugin is installed:
   When automatically generating class diagrams use this option to specify the maximal number of allowed siblings above
   (extended types and implemented interfaces) and below (extending types and implementing interfaces) the current type.
   If this number is exceeded the PlantUML layout is switched from top/down to left/right to allow a better readability
-  of the resulting class diagram.
+  of the resulting class diagram. Default value is `8`.
 
 ### License
 
