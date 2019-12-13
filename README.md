@@ -48,18 +48,22 @@ The following options are added to TypeDoc when the plugin is installed:
   directory of the generated documentation. If `remote` then the image tag uses an encoded link to the
   [plantuml server](http://www.plantuml.com/plantuml/). Default is `local`.
 * `--umlFormat <png|svg>`<br>
-  Specifies the image format to use. Default is PNG.
+  Specifies the image format to use. Default is `PNG`.
+* `--umlClassDiagramType <none|simple|detailed>`<br>
+  Use this option to automatically create a class diagram for every class and interface that has a comment.
+  The class diagram includes one level of base and sub classes. Use the value `simple` to only render the name
+  of the class or interface. Use the value `detailed` to also render properties and methods. Default is `NONE`.
 * `--umlClassDiagramPosition <above|below>`<br>
-  Automatically creates a class diagram for every class and interface that has a comment. The class diagram is inserted
-  `above` or `below` the comment's text. It includes one level of base and sub classes.
+  Use this option to specify where the automatically created class diagram should be placed.
+  The class diagram can be inserted `above` or `below` the comment's text. Default is `below`.
 * `--umlClassDiagramHideEmptyMembers <true|false>`<br>
-  When automatically generating class diagrams if this option is set to true attributes and methods are hidden if they
-  are empty. Default is false.
+  When automatically generating class diagrams if this option is set to true properties and methods are hidden if they
+  are empty. Default is `true`.
 * `--umlClassDiagramTopDownLayoutMaxSiblings <integer>`<br>
-  When automatically generating class diagrams use this option to specify the maximal number of allowed siblings above
+  When automatically generating class diagrams use this option to specify the maximum number of allowed siblings above
   (extended types and implemented interfaces) and below (extending types and implementing interfaces) the current type.
   If this number is exceeded the PlantUML layout is switched from top/down to left/right to allow a better readability
-  of the resulting class diagram. Default value is `8`.
+  of the resulting class diagram. Default value is `6`.
 
 ### License
 
