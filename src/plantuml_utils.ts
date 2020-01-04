@@ -145,7 +145,7 @@ export class PlantUmlUtils {
             plantUml += "abstract ";
         }
 
-        if (reflection.kind === 128) {
+        if (reflection.kind === ReflectionKind.Class) {
             plantUml += "class ";
         } else {
             plantUml += "interface ";
