@@ -1,39 +1,73 @@
 {
-  "name": "typedoc-plantuml",
-  "version": "1.4.1",
-  "description": "Plugin for TypeDoc that generates images for PlantUML diagrams embedded in comments.",
-  "main": "lib/plugin.js",
-  "scripts": {
-    "test": "node tests/run.js"
-  },
-  "author": {
-    "name": "Artifact Health, Inc",
-    "url": "http://www.artifacthealth.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/artifacthealth/typedoc-plantuml.git"
-  },
-  "licenses": [
-    {
-      "type": "Apache-2.0"
-    }
-  ],
-  "keywords": [
-    "uml",
-    "plantuml",
-    "typedoc",
-    "typedocplugin"
-  ],
-  "dependencies": {
-    "node-plantuml": "^0.4.4",
-    "pako": "^1.0.0"
-  },
-  "devDependencies": {
-    "dir-compare": "0.0.2",
-    "rimraf": "^2.5.1"
-  },
-  "peerDependencies": {
-    "typedoc": "^0.4.1"
-  }
+    "_from": "typedoc-plantuml",
+    "_id": "typedoc-plantuml@2.0.0",
+    "_inBundle": false,
+    "_integrity": "sha1-OdOgKP+DccIqA5u5oMJHBcBbVgg=",
+    "_location": "/typedoc-plantuml",
+    "_phantomChildren": {},
+    "_requested": {
+        "type": "tag",
+        "registry": true,
+        "raw": "typedoc-plantuml",
+        "name": "typedoc-plantuml",
+        "escapedName": "typedoc-plantuml",
+        "rawSpec": "",
+        "saveSpec": null,
+        "fetchSpec": "latest"
+    },
+    "_requiredBy": [
+        "#USER",
+        "/"
+    ],
+    "_resolved": "https://registry.npmjs.org/typedoc-plantuml/-/typedoc-plantuml-1.4.1.tgz",
+    "_shasum": "39d3a028ff8371c22a039bb9a0c24705c05b5608",
+    "_spec": "typedoc-plantuml",
+    "_where": "C:\\MyProjects\\typedoc\\typedoc-plantuml-ts",
+    "author": {
+        "name": "Artifact Health, Inc",
+        "url": "http://www.artifacthealth.com"
+    },
+    "bugs": {
+        "url": "https://github.com/artifacthealth/typedoc-plantuml/issues"
+    },
+    "dependencies": {
+        "node-plantuml": "^0.4.4",
+        "pako": "^1.0.0",
+        "typedoc-plugin-base": "^1.2.0"
+    },
+    "deprecated": false,
+    "description": "Plugin for TypeDoc that generates images for PlantUML diagrams embedded in comments.",
+    "devDependencies": {
+        "@types/node": "^12.12.21",
+        "@types/pako": "^1.0.1",
+        "prettier": "^1.19.1",
+        "tslint": "^5.20.1",
+        "typedoc": "^0.15.6",
+        "typescript": "^3.7.3"
+    },
+    "homepage": "https://github.com/artifacthealth/typedoc-plantuml#readme",
+    "keywords": [
+        "uml",
+        "plantuml",
+        "typedoc",
+        "typedocplugin"
+    ],
+    "license": "Apache-2.0",
+    "main": "dist/index.js",
+    "name": "typedoc-plantuml",
+    "peerDependencies": {
+        "typedoc": "^0.15.6"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/artifacthealth/typedoc-plantuml.git"
+    },
+    "scripts": {
+        "build": "tsc",
+        "test": "node tests/run.js"
+    },
+    "version": "2.0.0",
+    "files": [
+        "/dist"
+    ]
 }

@@ -1,0 +1,9 @@
+{
+    "defaultSeverity": "error",
+    "extends": ["tslint:recommended"],
+    "rules": {
+        "trailing-comma": true,
+        "member-ordering": false,
+        "no-bitwise": false
+    }
+}
