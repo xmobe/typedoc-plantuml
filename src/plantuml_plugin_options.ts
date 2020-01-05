@@ -37,6 +37,14 @@ export enum ClassDiagramPosition {
 }
 
 /**
+ * Supported visibility styles for members when automatically generating class diagrams.
+ */
+export enum ClassDiagrammMemberVisibilityStyle {
+    Text = 1,
+    Icon = 2,
+}
+
+/**
  * Class storing the options of the plugin.
  */
 export class PlantUmlPluginOptions {
@@ -57,6 +65,9 @@ export class PlantUmlPluginOptions {
 
     /** Specifies the boundary before swiching from top->down to left->right direction for class diagrams. */
     protected autoClassDiagramTopDownLayoutMaxSiblingsOption: PluginNumberOption;
+
+    /** Specifies whether UML class diagrams should be created automatically. */
+    protected autoClassDiagrammMemberVisibilityStyleOption: PluginEnumOption<ClassDiagrammMemberVisibilityStyle>;
 
     /**
      * Intializes a new plugin options instance.
@@ -116,6 +127,16 @@ export class PlantUmlPluginOptions {
             0,
             Infinity
         );
+
+        this.autoClassDiagrammMemberVisibilityStyleOption = new PluginEnumOption<ClassDiagrammMemberVisibilityStyle>(
+            "umlClassDiagramMemberVisibilityStyle",
+            "text|icon",
+            ClassDiagrammMemberVisibilityStyle.Icon,
+            new Map([
+                ["text", ClassDiagrammMemberVisibilityStyle.Text],
+                ["icon", ClassDiagrammMemberVisibilityStyle.Icon],
+            ])
+        );
     }
 
     /**
@@ -129,6 +150,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramPositionOption.addToApplication(typedoc);
         this.autoClassDiagramHideEmptyMembersOption.addToApplication(typedoc);
         this.autoClassDiagramTopDownLayoutMaxSiblingsOption.addToApplication(typedoc);
+        this.autoClassDiagrammMemberVisibilityStyleOption.addToApplication(typedoc);
     }
 
     /**
@@ -142,6 +164,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramPositionOption.readValueFromApplication(typedoc);
         this.autoClassDiagramHideEmptyMembersOption.readValueFromApplication(typedoc);
         this.autoClassDiagramTopDownLayoutMaxSiblingsOption.readValueFromApplication(typedoc);
+        this.autoClassDiagrammMemberVisibilityStyleOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -190,5 +213,13 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramTopDownLayoutMaxSiblings(): number {
         return this.autoClassDiagramTopDownLayoutMaxSiblingsOption.val;
+    }
+
+    /**
+     * Returns how the member visibility is rendered in the automatically created class diagram.
+     * @returns How the member visibility is rendered in the automatically created class diagram.
+     */
+    get autoClassDiagrammMemberVisibilityStyle(): ClassDiagrammMemberVisibilityStyle {
+        return this.autoClassDiagrammMemberVisibilityStyleOption.val;
     }
 }

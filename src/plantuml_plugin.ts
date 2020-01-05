@@ -7,6 +7,7 @@ import { PluginBase } from "typedoc-plugin-base/dist/plugin_base";
 import { Context, Converter } from "typedoc/dist/lib/converter";
 import { PageEvent, RendererEvent } from "typedoc/dist/lib/output/events";
 import {
+    ClassDiagrammMemberVisibilityStyle,
     ClassDiagramPosition,
     ClassDiagramType,
     ImageFormat,
@@ -27,14 +28,14 @@ export class PlantUmlPlugin extends PluginBase {
     protected numberOfGeneratedImages = 0;
 
     /** The options of this plugin. */
-    protected pluginOptions = new PlantUmlPluginOptions();
+    protected options = new PlantUmlPluginOptions();
 
     /**
      * Adds the plugin's options to the application's options.
      * @param typedoc The TypeDoc application.
      */
     protected addOptionsToApplication(typedoc: Application): void {
-        this.pluginOptions.addToApplication(typedoc);
+        this.options.addToApplication(typedoc);
     }
 
     /**
@@ -57,7 +58,7 @@ export class PlantUmlPlugin extends PluginBase {
      * @param context Describes the current state the converter is in.
      */
     public onResolveBegin(context: Context): void {
-        this.pluginOptions.readValuesFromApplication(context.converter.owner.application);
+        this.options.readValuesFromApplication(context.converter.owner.application);
     }
 
     /**
@@ -76,15 +77,15 @@ export class PlantUmlPlugin extends PluginBase {
                 if (reflection && reflection.comment) {
                     // add UML tag for class diagram only for classes and interfaces
                     if (
-                        (this.pluginOptions.autoClassDiagramType === ClassDiagramType.Simple ||
-                            this.pluginOptions.autoClassDiagramType === ClassDiagramType.Detailed) &&
+                        (this.options.autoClassDiagramType === ClassDiagramType.Simple ||
+                            this.options.autoClassDiagramType === ClassDiagramType.Detailed) &&
                         reflection instanceof DeclarationReflection &&
                         (reflection.kind === ReflectionKind.Class || reflection.kind === ReflectionKind.Interface)
                     ) {
                         const classDiagramPlantUmlLines = this.getClassDiagramPlantUmlForReflection(reflection);
 
                         if (reflection.comment) {
-                            if (this.pluginOptions.autoClassDiagramPosition === ClassDiagramPosition.Above) {
+                            if (this.options.autoClassDiagramPosition === ClassDiagramPosition.Above) {
                                 reflection.comment.shortText =
                                     "<uml>\n" +
                                     classDiagramPlantUmlLines.join("\n") +
@@ -156,16 +157,16 @@ export class PlantUmlPlugin extends PluginBase {
                 const alt = match[2];
 
                 // decode image and write to disk if using local images
-                if (this.pluginOptions.outputImageLocation === ImageLocation.Local) {
+                if (this.options.outputImageLocation === ImageLocation.Local) {
                     src = this.writeLocalImage(event.filename, src);
                 } else {
                     // this is the case where we have a remote file, so we don't need to write out the image but
                     // we need to add the server back into the image source since it was removed by the regex
-                    src = PlantUmlUtils.plantUmlServerUrl + this.pluginOptions.outputImageFormat.toString() + "/" + src;
+                    src = PlantUmlUtils.plantUmlServerUrl + this.options.outputImageFormat.toString() + "/" + src;
                 }
 
                 // re-write image tag
-                if (this.pluginOptions.outputImageFormat === ImageFormat.PNG) {
+                if (this.options.outputImageFormat === ImageFormat.PNG) {
                     segments.push('<img class="uml" src=');
                     // replace external path in content with path to image to assets directory
                     segments.push('"' + src + '"');
@@ -201,7 +202,7 @@ export class PlantUmlPlugin extends PluginBase {
      * @returns The Plant UML lines for the class diagram of the given reflection.
      */
     protected getClassDiagramPlantUmlForReflection(reflection: DeclarationReflection): string[] {
-        const includeChildren = this.pluginOptions.autoClassDiagramType === ClassDiagramType.Detailed;
+        const includeChildren = this.options.autoClassDiagramType === ClassDiagramType.Detailed;
 
         let plantUmlLines = new Array<string>();
         let siblingsAbove = 0;
@@ -248,16 +249,20 @@ export class PlantUmlPlugin extends PluginBase {
 
         // Only add class diagramm, if there is inheritance or implementation involved.
         if (siblingsAbove + siblingsBelow > 0) {
-            if (this.pluginOptions.autoClassDiagramHideEmptyMembers) {
+            if (this.options.autoClassDiagramHideEmptyMembers) {
                 plantUmlLines.unshift("hide empty fields");
                 plantUmlLines.unshift("hide empty methods");
             }
 
             if (
-                siblingsAbove > this.pluginOptions.autoClassDiagramTopDownLayoutMaxSiblings ||
-                siblingsBelow > this.pluginOptions.autoClassDiagramTopDownLayoutMaxSiblings
+                siblingsAbove > this.options.autoClassDiagramTopDownLayoutMaxSiblings ||
+                siblingsBelow > this.options.autoClassDiagramTopDownLayoutMaxSiblings
             ) {
                 plantUmlLines.unshift("left to right direction");
+            }
+
+            if (this.options.autoClassDiagrammMemberVisibilityStyle === ClassDiagrammMemberVisibilityStyle.Text) {
+                plantUmlLines.unshift("skinparam classAttributeIconSize 0");
             }
         } else {
             plantUmlLines = [];
@@ -293,7 +298,7 @@ export class PlantUmlPlugin extends PluginBase {
                         segments.push(match[1]);
                     }
                     segments.push(
-                        "](" + PlantUmlUtils.plantUmlServerUrl + this.pluginOptions.outputImageFormat.toString() + "/"
+                        "](" + PlantUmlUtils.plantUmlServerUrl + this.options.outputImageFormat.toString() + "/"
                     );
                     segments.push(PlantUmlUtils.encode(match[2]));
                     segments.push(")");
@@ -322,10 +327,10 @@ export class PlantUmlPlugin extends PluginBase {
     protected writeLocalImage(pageFilename: string, src: string): string {
         // setup plantuml encoder and decoder
         const decode = plantuml.decode(src);
-        const gen = plantuml.generate({ format: this.pluginOptions.outputImageFormat.toString() });
+        const gen = plantuml.generate({ format: this.options.outputImageFormat.toString() });
 
         // get image filename
-        const filename = "uml" + ++this.numberOfGeneratedImages + "." + this.pluginOptions.outputImageFormat.toString();
+        const filename = "uml" + ++this.numberOfGeneratedImages + "." + this.options.outputImageFormat.toString();
         const imagePath = path.join(this.typeDocOutputDirectory, filename);
 
         // decode and save png to assets directory

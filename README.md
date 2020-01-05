@@ -64,6 +64,9 @@ The following options are added to TypeDoc when the plugin is installed:
   (extended types and implemented interfaces) and below (extending types and implementing interfaces) the current type.
   If this number is exceeded the PlantUML layout is switched from top/down to left/right to allow a better readability
   of the resulting class diagram. Default value is `6`.
+* `--umlClassDiagramMemberVisibilityStyle <text|icon>`<br>
+  Use this option to specify how the visibility (private, protected or public) of class members (properties and methods)
+  should be rendered in the class diagrams. Default is `icon`.
 
 ### License
 
