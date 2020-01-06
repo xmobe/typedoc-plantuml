@@ -7,7 +7,7 @@ import { PluginBase } from "typedoc-plugin-base/dist/plugin_base";
 import { Context, Converter } from "typedoc/dist/lib/converter";
 import { PageEvent, RendererEvent } from "typedoc/dist/lib/output/events";
 import {
-    ClassDiagrammMemberVisibilityStyle,
+    ClassDiagramMemberVisibilityStyle,
     ClassDiagramPosition,
     ClassDiagramType,
     ImageFormat,
@@ -247,7 +247,7 @@ export class PlantUmlPlugin extends PluginBase {
             ++siblingsBelow;
         }
 
-        // Only add class diagramm, if there is inheritance or implementation involved.
+        // Only add class diagram, if there is inheritance or implementation involved.
         if (siblingsAbove + siblingsBelow > 0) {
             if (this.options.autoClassDiagramHideEmptyMembers) {
                 plantUmlLines.unshift("hide empty fields");
@@ -261,7 +261,7 @@ export class PlantUmlPlugin extends PluginBase {
                 plantUmlLines.unshift("left to right direction");
             }
 
-            if (this.options.autoClassDiagrammMemberVisibilityStyle === ClassDiagrammMemberVisibilityStyle.Text) {
+            if (this.options.autoClassDiagramMemberVisibilityStyle === ClassDiagramMemberVisibilityStyle.Text) {
                 plantUmlLines.unshift("skinparam classAttributeIconSize 0");
             }
         } else {
