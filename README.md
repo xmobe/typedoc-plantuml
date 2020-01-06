@@ -75,6 +75,8 @@ Use the first of the following options to enable this feature and the other opti
   should be rendered in the class diagrams. Default is `icon`.
 * `--umlClassDiagramHideCircledChar <true|false>`<br>
   If this option is set to true the circled char in front of class and interface names is omitted. Default is `false`.
+* `--umlClassDiagramHideShadow <true|false>`<br>
+  If this option is set to true the shadowing in the class diagrams is disabled. Default is `false`.
 
 ## License
 

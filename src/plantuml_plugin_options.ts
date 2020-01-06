@@ -75,6 +75,9 @@ export class PlantUmlPluginOptions {
      */
     protected autoClassDiagramHideCircledCharOption: PluginBooleanOption;
 
+    /** Specifies whether to hide the shadowing in the automatically created class diagrams */
+    protected autoClassDiagramHideShadowOption: PluginBooleanOption;
+
     /**
      * Intializes a new plugin options instance.
      */
@@ -149,6 +152,12 @@ export class PlantUmlPluginOptions {
             "true|false",
             false
         );
+
+        this.autoClassDiagramHideShadowOption = new PluginBooleanOption(
+            "umlClassDiagramHideShadow",
+            "true|false",
+            false
+        );
     }
 
     /**
@@ -164,6 +173,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramTopDownLayoutMaxSiblingsOption.addToApplication(typedoc);
         this.autoClassDiagramMemberVisibilityStyleOption.addToApplication(typedoc);
         this.autoClassDiagramHideCircledCharOption.addToApplication(typedoc);
+        this.autoClassDiagramHideShadowOption.addToApplication(typedoc);
     }
 
     /**
@@ -179,6 +189,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramTopDownLayoutMaxSiblingsOption.readValueFromApplication(typedoc);
         this.autoClassDiagramMemberVisibilityStyleOption.readValueFromApplication(typedoc);
         this.autoClassDiagramHideCircledCharOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramHideShadowOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -243,5 +254,13 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramHideCircledChar(): boolean {
         return this.autoClassDiagramHideCircledCharOption.val;
+    }
+
+    /**
+     * Returns whether to hide the shadows in the automatically created class diagram.
+     * @returns Whether to hide the shadows in the automatically created class diagram.
+     */
+    get autoClassDiagramHideShadow(): boolean {
+        return this.autoClassDiagramHideShadowOption.val;
     }
 }

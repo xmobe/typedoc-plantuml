@@ -268,6 +268,10 @@ export class PlantUmlPlugin extends PluginBase {
             if (this.options.autoClassDiagramMemberVisibilityStyle === ClassDiagramMemberVisibilityStyle.Text) {
                 plantUmlLines.unshift("skinparam classAttributeIconSize 0");
             }
+
+            if (this.options.autoClassDiagramHideShadow) {
+                plantUmlLines.unshift("skinparam shadowing false");
+            }
         } else {
             plantUmlLines = [];
         }
