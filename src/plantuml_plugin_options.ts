@@ -70,6 +70,12 @@ export class PlantUmlPluginOptions {
     protected autoClassDiagramMemberVisibilityStyleOption: PluginEnumOption<ClassDiagramMemberVisibilityStyle>;
 
     /**
+     * Specifies whether to hide the circled character in front of class names
+     * in the automatically created class diagram.
+     */
+    protected autoClassDiagramHideCircledCharOption: PluginBooleanOption;
+
+    /**
      * Intializes a new plugin options instance.
      */
     constructor() {
@@ -137,6 +143,12 @@ export class PlantUmlPluginOptions {
                 ["icon", ClassDiagramMemberVisibilityStyle.Icon],
             ])
         );
+
+        this.autoClassDiagramHideCircledCharOption = new PluginBooleanOption(
+            "umlClassDiagramHideCircledChar",
+            "true|false",
+            false
+        );
     }
 
     /**
@@ -151,6 +163,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramHideEmptyMembersOption.addToApplication(typedoc);
         this.autoClassDiagramTopDownLayoutMaxSiblingsOption.addToApplication(typedoc);
         this.autoClassDiagramMemberVisibilityStyleOption.addToApplication(typedoc);
+        this.autoClassDiagramHideCircledCharOption.addToApplication(typedoc);
     }
 
     /**
@@ -165,6 +178,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramHideEmptyMembersOption.readValueFromApplication(typedoc);
         this.autoClassDiagramTopDownLayoutMaxSiblingsOption.readValueFromApplication(typedoc);
         this.autoClassDiagramMemberVisibilityStyleOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramHideCircledCharOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -221,5 +235,13 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramMemberVisibilityStyle(): ClassDiagramMemberVisibilityStyle {
         return this.autoClassDiagramMemberVisibilityStyleOption.val;
+    }
+
+    /**
+     * Returns whether to hide the circled character in front of class names for class diagrams.
+     * @returns Whether to hide the circled character in front of class names for class diagrams.
+     */
+    get autoClassDiagramHideCircledChar(): boolean {
+        return this.autoClassDiagramHideCircledCharOption.val;
     }
 }

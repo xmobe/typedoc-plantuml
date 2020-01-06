@@ -254,6 +254,10 @@ export class PlantUmlPlugin extends PluginBase {
                 plantUmlLines.unshift("hide empty methods");
             }
 
+            if (this.options.autoClassDiagramHideCircledChar) {
+                plantUmlLines.unshift("hide circle");
+            }
+
             if (
                 siblingsAbove > this.options.autoClassDiagramTopDownLayoutMaxSiblings ||
                 siblingsBelow > this.options.autoClassDiagramTopDownLayoutMaxSiblings
