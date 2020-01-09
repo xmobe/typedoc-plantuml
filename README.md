@@ -77,6 +77,9 @@ Use the first of the following options to enable this feature and the other opti
   If this option is set to true the circled char in front of class and interface names is omitted. Default is `false`.
 * `--umlClassDiagramHideShadow <true|false>`<br>
   If this option is set to true the shadowing in the class diagrams is disabled. Default is `false`.
+* `--umlClassDiagramBoxBackgroundColor <transparent|#RGBHEX>`<br>
+  Use this option to specify the background color of the boxes within the class diagram.
+  Default is the PlantUML default color for this skin parameter.
 
 ## License
 

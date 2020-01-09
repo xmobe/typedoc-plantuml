@@ -272,6 +272,12 @@ export class PlantUmlPlugin extends PluginBase {
             if (this.options.autoClassDiagramHideShadow) {
                 plantUmlLines.unshift("skinparam shadowing false");
             }
+
+            if (this.options.autoClassDiagramBoxBackgroundColor) {
+                plantUmlLines.unshift(
+                    "skinparam classBackgroundColor " + this.options.autoClassDiagramBoxBackgroundColor
+                );
+            }
         } else {
             plantUmlLines = [];
         }

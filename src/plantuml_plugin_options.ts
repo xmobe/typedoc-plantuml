@@ -2,6 +2,7 @@ import { Application } from "typedoc";
 import { PluginBooleanOption } from "typedoc-plugin-base/dist/plugin_boolean_option";
 import { PluginEnumOption } from "typedoc-plugin-base/dist/plugin_enum_option";
 import { PluginNumberOption } from "typedoc-plugin-base/dist/plugin_number_option";
+import { PluginStringOption } from "typedoc-plugin-base/dist/plugin_string_option";
 
 /**
  * Supported image output formats.
@@ -77,6 +78,9 @@ export class PlantUmlPluginOptions {
 
     /** Specifies whether to hide the shadowing in the automatically created class diagrams */
     protected autoClassDiagramHideShadowOption: PluginBooleanOption;
+
+    /** Specifies the background color used for boxes in automatically created class diagrams. */
+    protected autoClassDiagramBoxBackgroundColorOption: PluginStringOption;
 
     /**
      * Intializes a new plugin options instance.
@@ -158,6 +162,12 @@ export class PlantUmlPluginOptions {
             "true|false",
             false
         );
+
+        this.autoClassDiagramBoxBackgroundColorOption = new PluginStringOption(
+            "umlClassDiagramBoxBackgroundColor",
+            "transparent|#RGBHEX",
+            ""
+        );
     }
 
     /**
@@ -174,6 +184,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramMemberVisibilityStyleOption.addToApplication(typedoc);
         this.autoClassDiagramHideCircledCharOption.addToApplication(typedoc);
         this.autoClassDiagramHideShadowOption.addToApplication(typedoc);
+        this.autoClassDiagramBoxBackgroundColorOption.addToApplication(typedoc);
     }
 
     /**
@@ -190,6 +201,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramMemberVisibilityStyleOption.readValueFromApplication(typedoc);
         this.autoClassDiagramHideCircledCharOption.readValueFromApplication(typedoc);
         this.autoClassDiagramHideShadowOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramBoxBackgroundColorOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -262,5 +274,15 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramHideShadow(): boolean {
         return this.autoClassDiagramHideShadowOption.val;
+    }
+
+    /**
+     * Returns the background color that should be used for boxes in automatically created class diagrams.
+     * @returns The background color that should be used for boxes in automatically created class diagrams.
+     *          An empty string if no value was specified by the caller.
+     *          In this case the PlantUML default value should be used.
+     */
+    get autoClassDiagramBoxBackgroundColor(): string {
+        return this.autoClassDiagramBoxBackgroundColorOption.val;
     }
 }
