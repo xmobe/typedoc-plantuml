@@ -80,6 +80,9 @@ Use the first of the following options to enable this feature and the other opti
 * `--umlClassDiagramBoxBackgroundColor <transparent|#RGBHEX>`<br>
   Use this option to specify the background color of the boxes within the class diagram.
   Default is the PlantUML default color for this skin parameter.
+* `--umlClassDiagramBoxBorderColor <transparent|#RGBHEX>`<br>
+  Use this option to specify the border color of the boxes within the class diagram.
+  Default is the PlantUML default color for this skin parameter.
 
 ## License
 

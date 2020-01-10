@@ -75,16 +75,17 @@ export class PlantUmlPlugin extends PluginBase {
                 const reflection = project.reflections[key];
 
                 if (reflection && reflection.comment) {
-                    // add UML tag for class diagram only for classes and interfaces
+                    // add UML tag for class diagram only for classes and interfaces with a comment
                     if (
                         (this.options.autoClassDiagramType === ClassDiagramType.Simple ||
                             this.options.autoClassDiagramType === ClassDiagramType.Detailed) &&
                         reflection instanceof DeclarationReflection &&
-                        (reflection.kind === ReflectionKind.Class || reflection.kind === ReflectionKind.Interface)
+                        (reflection.kind === ReflectionKind.Class || reflection.kind === ReflectionKind.Interface) &&
+                        reflection.comment
                     ) {
                         const classDiagramPlantUmlLines = this.getClassDiagramPlantUmlForReflection(reflection);
 
-                        if (reflection.comment) {
+                        if (classDiagramPlantUmlLines.length > 0) {
                             if (this.options.autoClassDiagramPosition === ClassDiagramPosition.Above) {
                                 reflection.comment.shortText =
                                     "<uml>\n" +
@@ -200,6 +201,7 @@ export class PlantUmlPlugin extends PluginBase {
      * Generates the Plant UML lines for the class diagram of the given reflection.
      * @param reflection The reflection for which to generate a class diagram.
      * @returns The Plant UML lines for the class diagram of the given reflection.
+     *          If the given reflection is not part of an inheritance or implementation, the result is an empty array.
      */
     protected getClassDiagramPlantUmlForReflection(reflection: DeclarationReflection): string[] {
         const includeChildren = this.options.autoClassDiagramType === ClassDiagramType.Detailed;
@@ -247,8 +249,10 @@ export class PlantUmlPlugin extends PluginBase {
             ++siblingsBelow;
         }
 
-        // Only add class diagram, if there is inheritance or implementation involved.
-        if (siblingsAbove + siblingsBelow > 0) {
+        // Return no UML if there is no inheritance or implementation involved
+        if (siblingsAbove + siblingsBelow === 0) {
+            plantUmlLines = [];
+        } else {
             if (this.options.autoClassDiagramHideEmptyMembers) {
                 plantUmlLines.unshift("hide empty fields");
                 plantUmlLines.unshift("hide empty methods");
@@ -278,8 +282,10 @@ export class PlantUmlPlugin extends PluginBase {
                     "skinparam classBackgroundColor " + this.options.autoClassDiagramBoxBackgroundColor
                 );
             }
-        } else {
-            plantUmlLines = [];
+
+            if (this.options.autoClassDiagramBoxBorderColor) {
+                plantUmlLines.unshift("skinparam classBorderColor " + this.options.autoClassDiagramBoxBorderColor);
+            }
         }
 
         return plantUmlLines;

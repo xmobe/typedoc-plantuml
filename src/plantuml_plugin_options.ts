@@ -82,6 +82,9 @@ export class PlantUmlPluginOptions {
     /** Specifies the background color used for boxes in automatically created class diagrams. */
     protected autoClassDiagramBoxBackgroundColorOption: PluginStringOption;
 
+    /** Specifies the border color used for boxes in automatically created class diagrams. */
+    protected autoClassDiagramBoxBorderColorOption: PluginStringOption;
+
     /**
      * Intializes a new plugin options instance.
      */
@@ -168,6 +171,12 @@ export class PlantUmlPluginOptions {
             "transparent|#RGBHEX",
             ""
         );
+
+        this.autoClassDiagramBoxBorderColorOption = new PluginStringOption(
+            "umlClassDiagramBoxBorderColor",
+            "transparent|#RGBHEX",
+            ""
+        );
     }
 
     /**
@@ -185,6 +194,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramHideCircledCharOption.addToApplication(typedoc);
         this.autoClassDiagramHideShadowOption.addToApplication(typedoc);
         this.autoClassDiagramBoxBackgroundColorOption.addToApplication(typedoc);
+        this.autoClassDiagramBoxBorderColorOption.addToApplication(typedoc);
     }
 
     /**
@@ -202,6 +212,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramHideCircledCharOption.readValueFromApplication(typedoc);
         this.autoClassDiagramHideShadowOption.readValueFromApplication(typedoc);
         this.autoClassDiagramBoxBackgroundColorOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramBoxBorderColorOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -284,5 +295,15 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramBoxBackgroundColor(): string {
         return this.autoClassDiagramBoxBackgroundColorOption.val;
+    }
+
+    /**
+     * Returns the border color that should be used for boxes in automatically created class diagrams.
+     * @returns The border color that should be used for boxes in automatically created class diagrams.
+     *          An empty string if no value was specified by the caller.
+     *          In this case the PlantUML default value should be used.
+     */
+    get autoClassDiagramBoxBorderColor(): string {
+        return this.autoClassDiagramBoxBorderColorOption.val;
     }
 }
