@@ -277,6 +277,10 @@ export class PlantUmlPlugin extends PluginBase {
                 plantUmlLines.unshift("skinparam shadowing false");
             }
 
+            if (this.options.autoClassDiagramBoxBorderRadius) {
+                plantUmlLines.unshift("skinparam roundcorner " + this.options.autoClassDiagramBoxBorderRadius);
+            }
+
             if (this.options.autoClassDiagramBoxBackgroundColor) {
                 plantUmlLines.unshift(
                     "skinparam classBackgroundColor " + this.options.autoClassDiagramBoxBackgroundColor

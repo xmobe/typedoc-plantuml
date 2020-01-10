@@ -85,6 +85,9 @@ export class PlantUmlPluginOptions {
     /** Specifies the border color used for boxes in automatically created class diagrams. */
     protected autoClassDiagramBoxBorderColorOption: PluginStringOption;
 
+    /** Specifies the border radius used for boxes in automatically created class diagrams. */
+    protected autoClassDiagramBoxBorderRadiusOption: PluginNumberOption;
+
     /**
      * Intializes a new plugin options instance.
      */
@@ -177,6 +180,14 @@ export class PlantUmlPluginOptions {
             "transparent|#RGBHEX",
             ""
         );
+
+        this.autoClassDiagramBoxBorderRadiusOption = new PluginNumberOption(
+            "umlClassDiagramBoxBorderRadius",
+            "The box border radius in pixel used when automatically creating class diagrams.",
+            0,
+            0,
+            Infinity
+        );
     }
 
     /**
@@ -195,6 +206,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramHideShadowOption.addToApplication(typedoc);
         this.autoClassDiagramBoxBackgroundColorOption.addToApplication(typedoc);
         this.autoClassDiagramBoxBorderColorOption.addToApplication(typedoc);
+        this.autoClassDiagramBoxBorderRadiusOption.addToApplication(typedoc);
     }
 
     /**
@@ -213,6 +225,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramHideShadowOption.readValueFromApplication(typedoc);
         this.autoClassDiagramBoxBackgroundColorOption.readValueFromApplication(typedoc);
         this.autoClassDiagramBoxBorderColorOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramBoxBorderRadiusOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -305,5 +318,13 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramBoxBorderColor(): string {
         return this.autoClassDiagramBoxBorderColorOption.val;
+    }
+
+    /**
+     * Returns the border radius that should be used for boxes in automatically created class diagrams.
+     * @returns The border radius that should be used for boxes in automatically created class diagrams.
+     */
+    get autoClassDiagramBoxBorderRadius(): number {
+        return this.autoClassDiagramBoxBorderRadiusOption.val;
     }
 }
