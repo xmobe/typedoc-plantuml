@@ -290,6 +290,10 @@ export class PlantUmlPlugin extends PluginBase {
             if (this.options.autoClassDiagramBoxBorderColor) {
                 plantUmlLines.unshift("skinparam classBorderColor " + this.options.autoClassDiagramBoxBorderColor);
             }
+
+            if (this.options.autoClassDiagramArrowColor) {
+                plantUmlLines.unshift("skinparam classArrowColor " + this.options.autoClassDiagramArrowColor);
+            }
         }
 
         return plantUmlLines;

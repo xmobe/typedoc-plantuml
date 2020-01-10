@@ -70,8 +70,8 @@ Use the first of the following options to enable this feature and the other opti
     layout is switched from top/down to left/right to allow a better readability of the resulting class diagram.
     Default value is `6`.
 -   `--umlClassDiagramMemberVisibilityStyle <text|icon>`<br>
-    Use this option to specify how the visibility (private, protected or public) of class members (properties and methods)
-    should be rendered in the class diagrams. Default is `icon`.
+    Use this option to specify how the visibility (private, protected or public) of class members
+    (properties and methods) should be rendered in the class diagrams. Default is `icon`.
 -   `--umlClassDiagramHideCircledChar <true|false>`<br>
     If this option is set to true the circled char in front of class and interface names is omitted. Default is `false`.
 -   `--umlClassDiagramHideShadow <true|false>`<br>
@@ -85,6 +85,9 @@ Use the first of the following options to enable this feature and the other opti
 -   `--umlClassDiagramBoxBorderRadius <integer>`<br>
     Use this option to specify the border radius of the boxes within the class diagram.
     Unit is pixel. Default value is `0`.
+-   `--umlClassDiagramArrowColor <transparent|#RGBHEX>`<br>
+    Use this option to specify the color of the arrows within the class diagram.
+    Default is the PlantUML default color for this skin parameter.
 
 ## License
 
