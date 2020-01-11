@@ -78,16 +78,30 @@ Use the first of the following options to enable this feature and the other opti
     If this option is set to true the shadowing in the class diagrams is disabled. Default is `false`.
 -   `--umlClassDiagramBoxBackgroundColor <transparent|#RGBHEX>`<br>
     Use this option to specify the background color of the boxes within the class diagram.
-    Default is the PlantUML default color for this skin parameter.
+    Default is the PlantUML default value for this skin parameter.
 -   `--umlClassDiagramBoxBorderColor <transparent|#RGBHEX>`<br>
     Use this option to specify the border color of the boxes within the class diagram.
-    Default is the PlantUML default color for this skin parameter.
+    Default is the PlantUML default value for this skin parameter.
 -   `--umlClassDiagramBoxBorderRadius <integer>`<br>
     Use this option to specify the border radius of the boxes within the class diagram.
     Unit is pixel. Default value is `0`.
 -   `--umlClassDiagramArrowColor <transparent|#RGBHEX>`<br>
     Use this option to specify the color of the arrows within the class diagram.
-    Default is the PlantUML default color for this skin parameter.
+    Default is the PlantUML default value for this skin parameter.
+-   `--umlClassDiagramClassFontName <font-name>`<br>
+    Use this option to specify the name of the font used for the class names within the class diagram.
+    **The PlantUML site remarks:** _Please note the fontname is highly system dependent, so do not over use it,
+    if you look for portability. Helvetica and Courier should be available on all system._
+    Default is the PlantUML default value for this skin parameter.
+-   `--umlClassDiagramClassFontSize <integer>`<br>
+    Use this option to specify the font size of the class names within the class diagram.
+    Unit is pixel. Default value is the PlantUML default value for this skin parameter.
+-   `--umlClassDiagramClassFontStyle <normal|plain|italic|bold>`<br>
+    Use this option to specify the style of the font used for the class names within the class diagram.
+    Default is the PlantUML default value for this skin parameter.
+-   `--umlClassDiagramClassFontColor <transparent|#RGBHEX>`<br>
+    Use this option to specify the color of the class names within the class diagram.
+    Default is the PlantUML default value for this skin parameter.
 
 ## License
 

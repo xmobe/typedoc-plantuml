@@ -91,6 +91,18 @@ export class PlantUmlPluginOptions {
     /** Specifies the color used for arrows in automatically created class diagrams. */
     protected autoClassDiagramArrowColorOption: PluginStringOption;
 
+    /** Specifies the name of font used for the class name in automatically created class diagrams. */
+    protected autoClassDiagramClassFontNameOption: PluginStringOption;
+
+    /** Specifies the font size for the class name in automatically created class diagrams. */
+    protected autoClassDiagramClassFontSizeOption: PluginNumberOption;
+
+    /** Specifies the font style for the class name in automatically created class diagrams. */
+    protected autoClassDiagramClassFontStyleOption: PluginStringOption;
+
+    /** Specifies the font color for the class name in automatically created class diagrams. */
+    protected autoClassDiagramClassFontColorOption: PluginStringOption;
+
     /**
      * Intializes a new plugin options instance.
      */
@@ -197,6 +209,32 @@ export class PlantUmlPluginOptions {
             "transparent|#RGBHEX",
             ""
         );
+
+        this.autoClassDiagramClassFontNameOption = new PluginStringOption(
+            "umlClassDiagramClassFontName",
+            "The name of the font used for the class name when automatically creating class diagrams.",
+            ""
+        );
+
+        this.autoClassDiagramClassFontSizeOption = new PluginNumberOption(
+            "umlClassDiagramClassFontSize",
+            "The font size in pixel used for the class name when automatically creating class diagrams.",
+            0,
+            0,
+            Infinity
+        );
+
+        this.autoClassDiagramClassFontStyleOption = new PluginStringOption(
+            "umlClassDiagramClassFontStyle",
+            "normal|plain|italic|bold",
+            ""
+        );
+
+        this.autoClassDiagramClassFontColorOption = new PluginStringOption(
+            "umlClassDiagramClassFontColor",
+            "transparent|#RGBHEX",
+            ""
+        );
     }
 
     /**
@@ -217,6 +255,10 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramBoxBorderColorOption.addToApplication(typedoc);
         this.autoClassDiagramBoxBorderRadiusOption.addToApplication(typedoc);
         this.autoClassDiagramArrowColorOption.addToApplication(typedoc);
+        this.autoClassDiagramClassFontNameOption.addToApplication(typedoc);
+        this.autoClassDiagramClassFontSizeOption.addToApplication(typedoc);
+        this.autoClassDiagramClassFontStyleOption.addToApplication(typedoc);
+        this.autoClassDiagramClassFontColorOption.addToApplication(typedoc);
     }
 
     /**
@@ -237,6 +279,10 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramBoxBorderColorOption.readValueFromApplication(typedoc);
         this.autoClassDiagramBoxBorderRadiusOption.readValueFromApplication(typedoc);
         this.autoClassDiagramArrowColorOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramClassFontNameOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramClassFontSizeOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramClassFontStyleOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramClassFontColorOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -347,5 +393,45 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramArrowColor(): string {
         return this.autoClassDiagramArrowColorOption.val;
+    }
+
+    /**
+     * Returns the name of the font that should be used for the class name in automatically created class diagrams.
+     * @returns The name of the font that should be used for the class name in automatically created class diagrams.
+     *          An empty string if no value was specified by the caller.
+     *          In this case the PlantUML default value should be used.
+     */
+    get autoClassDiagramClassFontName(): string {
+        return this.autoClassDiagramClassFontNameOption.val;
+    }
+
+    /**
+     * Returns the font size that should be used for class names in automatically created class diagrams.
+     * @returns The font size that should be used for class names in automatically created class diagrams.
+     *          The value 0 if no value was specified by the caller.
+     *          In this case the PlantUML default value should be used.
+     */
+    get autoClassDiagramClassFontSize(): number {
+        return this.autoClassDiagramClassFontSizeOption.val;
+    }
+
+    /**
+     * Returns the font style that should be used for the class name in automatically created class diagrams.
+     * @returns The font style that should be used for the class name in automatically created class diagrams.
+     *          An empty string if no value was specified by the caller.
+     *          In this case the PlantUML default value should be used.
+     */
+    get autoClassDiagramClassFontStyle(): string {
+        return this.autoClassDiagramClassFontStyleOption.val;
+    }
+
+    /**
+     * Returns the font color that should be used for the class name in automatically created class diagrams.
+     * @returns The font color that should be used for the class name in automatically created class diagrams.
+     *          An empty string if no value was specified by the caller.
+     *          In this case the PlantUML default value should be used.
+     */
+    get autoClassDiagramClassFontColor(): string {
+        return this.autoClassDiagramClassFontColorOption.val;
     }
 }

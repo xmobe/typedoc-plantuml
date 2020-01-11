@@ -294,6 +294,22 @@ export class PlantUmlPlugin extends PluginBase {
             if (this.options.autoClassDiagramArrowColor) {
                 plantUmlLines.unshift("skinparam classArrowColor " + this.options.autoClassDiagramArrowColor);
             }
+
+            if (this.options.autoClassDiagramClassFontName) {
+                plantUmlLines.unshift("skinparam classFontName " + this.options.autoClassDiagramClassFontName);
+            }
+
+            if (this.options.autoClassDiagramClassFontSize) {
+                plantUmlLines.unshift("skinparam classFontSize " + this.options.autoClassDiagramClassFontSize);
+            }
+
+            if (this.options.autoClassDiagramClassFontStyle) {
+                plantUmlLines.unshift("skinparam classFontStyle " + this.options.autoClassDiagramClassFontStyle);
+            }
+
+            if (this.options.autoClassDiagramClassFontColor) {
+                plantUmlLines.unshift("skinparam classFontColor " + this.options.autoClassDiagramClassFontColor);
+            }
         }
 
         return plantUmlLines;
