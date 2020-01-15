@@ -94,7 +94,7 @@ export class PlantUmlPluginOptions {
     /** Specifies the color used for arrows in automatically created class diagrams. */
     protected autoClassDiagramArrowColorOption: PluginStringOption;
 
-    /** Specifies the name of font used for the class name in automatically created class diagrams. */
+    /** Specifies the name of the font used for the class name in automatically created class diagrams. */
     protected autoClassDiagramClassFontNameOption: PluginStringOption;
 
     /** Specifies the font size for the class name in automatically created class diagrams. */
@@ -105,6 +105,9 @@ export class PlantUmlPluginOptions {
 
     /** Specifies the font color for the class name in automatically created class diagrams. */
     protected autoClassDiagramClassFontColorOption: PluginStringOption;
+
+    /** Specifies the name of the font used for the class attributes in automatically created class diagrams. */
+    protected autoClassDiagramClassAttributeFontNameOption: PluginStringOption;
 
     /**
      * Intializes a new plugin options instance.
@@ -246,6 +249,12 @@ export class PlantUmlPluginOptions {
             "transparent|#RGBHEX",
             ""
         );
+
+        this.autoClassDiagramClassAttributeFontNameOption = new PluginStringOption(
+            "umlClassDiagramClassAttributeFontName",
+            "The name of the font used for the class attributes when automatically creating class diagrams.",
+            ""
+        );
     }
 
     /**
@@ -271,6 +280,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramClassFontSizeOption.addToApplication(typedoc);
         this.autoClassDiagramClassFontStyleOption.addToApplication(typedoc);
         this.autoClassDiagramClassFontColorOption.addToApplication(typedoc);
+        this.autoClassDiagramClassAttributeFontNameOption.addToApplication(typedoc);
     }
 
     /**
@@ -296,6 +306,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramClassFontSizeOption.readValueFromApplication(typedoc);
         this.autoClassDiagramClassFontStyleOption.readValueFromApplication(typedoc);
         this.autoClassDiagramClassFontColorOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramClassAttributeFontNameOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -456,5 +467,15 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramClassFontColor(): string {
         return this.autoClassDiagramClassFontColorOption.val;
+    }
+
+    /**
+     * Returns the name of the font that should be used for class attributes in automatically created class diagrams.
+     * @returns The name of the font that should be used for class attributes in automatically created class diagrams.
+     *          An empty string if no value was specified by the caller.
+     *          In this case the PlantUML default value should be used.
+     */
+    get autoClassDiagramClassAttributeFontName(): string {
+        return this.autoClassDiagramClassAttributeFontNameOption.val;
     }
 }

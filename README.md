@@ -105,6 +105,11 @@ Use the first of the following options to enable this feature and the other opti
 -   `--umlClassDiagramClassFontColor <transparent|#RGBHEX>`<br>
     Use this option to specify the color of the class names within the class diagram.
     Default is the PlantUML default value for this skin parameter.
+-   `--umlClassDiagramClassAttributeFontName <font-name>`<br>
+    Use this option to specify the name of the font used for class attributes within the class diagram.
+    **The PlantUML site remarks:** _Please note the fontname is highly system dependent, so do not over use it,
+    if you look for portability. Helvetica and Courier should be available on all system._
+    Default is the PlantUML default value for this skin parameter.
 
 ## License
 
