@@ -109,6 +109,9 @@ export class PlantUmlPluginOptions {
     /** Specifies the name of the font used for the class attributes in automatically created class diagrams. */
     protected autoClassDiagramClassAttributeFontNameOption: PluginStringOption;
 
+    /** Specifies the font size for the class attributes in automatically created class diagrams. */
+    protected autoClassDiagramClassAttributeFontSizeOption: PluginNumberOption;
+
     /**
      * Intializes a new plugin options instance.
      */
@@ -255,6 +258,14 @@ export class PlantUmlPluginOptions {
             "The name of the font used for the class attributes when automatically creating class diagrams.",
             ""
         );
+
+        this.autoClassDiagramClassAttributeFontSizeOption = new PluginNumberOption(
+            "umlClassDiagramClassAttributeFontSize",
+            "The font size in pixel used for the class attributes when automatically creating class diagrams.",
+            0,
+            0,
+            Infinity
+        );
     }
 
     /**
@@ -281,6 +292,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramClassFontStyleOption.addToApplication(typedoc);
         this.autoClassDiagramClassFontColorOption.addToApplication(typedoc);
         this.autoClassDiagramClassAttributeFontNameOption.addToApplication(typedoc);
+        this.autoClassDiagramClassAttributeFontSizeOption.addToApplication(typedoc);
     }
 
     /**
@@ -307,6 +319,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramClassFontStyleOption.readValueFromApplication(typedoc);
         this.autoClassDiagramClassFontColorOption.readValueFromApplication(typedoc);
         this.autoClassDiagramClassAttributeFontNameOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramClassAttributeFontSizeOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -477,5 +490,15 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramClassAttributeFontName(): string {
         return this.autoClassDiagramClassAttributeFontNameOption.val;
+    }
+
+    /**
+     * Returns the font size that should be used for class attributes in automatically created class diagrams.
+     * @returns The font size that should be used for class attributes in automatically created class diagrams.
+     *          The value 0 if no value was specified by the caller.
+     *          In this case the PlantUML default value should be used.
+     */
+    get autoClassDiagramClassAttributeFontSize(): number {
+        return this.autoClassDiagramClassAttributeFontSizeOption.val;
     }
 }

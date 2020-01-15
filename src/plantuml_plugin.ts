@@ -320,6 +320,12 @@ export class PlantUmlPlugin extends PluginBase {
                     "skinparam ClassAttributeFontName " + this.options.autoClassDiagramClassAttributeFontName
                 );
             }
+
+            if (this.options.autoClassDiagramClassAttributeFontSize) {
+                plantUmlLines.unshift(
+                    "skinparam ClassAttributeFontSize " + this.options.autoClassDiagramClassAttributeFontSize
+                );
+            }
         }
 
         return plantUmlLines;
