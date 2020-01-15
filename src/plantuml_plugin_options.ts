@@ -88,6 +88,9 @@ export class PlantUmlPluginOptions {
     /** Specifies the border radius used for boxes in automatically created class diagrams. */
     protected autoClassDiagramBoxBorderRadiusOption: PluginNumberOption;
 
+    /** Specifies the border width used for boxes in automatically created class diagrams. */
+    protected autoClassDiagramBoxBorderWidthOption: PluginNumberOption;
+
     /** Specifies the color used for arrows in automatically created class diagrams. */
     protected autoClassDiagramArrowColorOption: PluginStringOption;
 
@@ -204,6 +207,14 @@ export class PlantUmlPluginOptions {
             Infinity
         );
 
+        this.autoClassDiagramBoxBorderWidthOption = new PluginNumberOption(
+            "umlClassDiagramBoxBorderWidth",
+            "The box border width in pixel used when automatically creating class diagrams.",
+            NaN, // abuse NaN here, because 0 can be used to hide borders
+            0,
+            Infinity
+        );
+
         this.autoClassDiagramArrowColorOption = new PluginStringOption(
             "umlClassDiagramArrowColor",
             "transparent|#RGBHEX",
@@ -254,6 +265,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramBoxBackgroundColorOption.addToApplication(typedoc);
         this.autoClassDiagramBoxBorderColorOption.addToApplication(typedoc);
         this.autoClassDiagramBoxBorderRadiusOption.addToApplication(typedoc);
+        this.autoClassDiagramBoxBorderWidthOption.addToApplication(typedoc);
         this.autoClassDiagramArrowColorOption.addToApplication(typedoc);
         this.autoClassDiagramClassFontNameOption.addToApplication(typedoc);
         this.autoClassDiagramClassFontSizeOption.addToApplication(typedoc);
@@ -278,6 +290,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramBoxBackgroundColorOption.readValueFromApplication(typedoc);
         this.autoClassDiagramBoxBorderColorOption.readValueFromApplication(typedoc);
         this.autoClassDiagramBoxBorderRadiusOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramBoxBorderWidthOption.readValueFromApplication(typedoc);
         this.autoClassDiagramArrowColorOption.readValueFromApplication(typedoc);
         this.autoClassDiagramClassFontNameOption.readValueFromApplication(typedoc);
         this.autoClassDiagramClassFontSizeOption.readValueFromApplication(typedoc);
@@ -383,6 +396,16 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramBoxBorderRadius(): number {
         return this.autoClassDiagramBoxBorderRadiusOption.val;
+    }
+
+    /**
+     * Returns the border width that should be used for boxes in automatically created class diagrams.
+     * @returns The border width that should be used for boxes in automatically created class diagrams.
+     *          The NaN value if no value was specified by the caller.
+     *          In this case the PlantUML default value should be used.
+     */
+    get autoClassDiagramBoxBorderWidth(): number {
+        return this.autoClassDiagramBoxBorderWidthOption.val;
     }
 
     /**

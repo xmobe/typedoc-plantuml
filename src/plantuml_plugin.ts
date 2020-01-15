@@ -270,45 +270,49 @@ export class PlantUmlPlugin extends PluginBase {
             }
 
             if (this.options.autoClassDiagramMemberVisibilityStyle === ClassDiagramMemberVisibilityStyle.Text) {
-                plantUmlLines.unshift("skinparam classAttributeIconSize 0");
+                plantUmlLines.unshift("skinparam ClassAttributeIconSize 0");
             }
 
             if (this.options.autoClassDiagramHideShadow) {
-                plantUmlLines.unshift("skinparam shadowing false");
+                plantUmlLines.unshift("skinparam Shadowing false");
             }
 
             if (this.options.autoClassDiagramBoxBorderRadius) {
-                plantUmlLines.unshift("skinparam roundcorner " + this.options.autoClassDiagramBoxBorderRadius);
+                plantUmlLines.unshift("skinparam RoundCorner " + this.options.autoClassDiagramBoxBorderRadius);
             }
 
             if (this.options.autoClassDiagramBoxBackgroundColor) {
                 plantUmlLines.unshift(
-                    "skinparam classBackgroundColor " + this.options.autoClassDiagramBoxBackgroundColor
+                    "skinparam ClassBackgroundColor " + this.options.autoClassDiagramBoxBackgroundColor
                 );
             }
 
             if (this.options.autoClassDiagramBoxBorderColor) {
-                plantUmlLines.unshift("skinparam classBorderColor " + this.options.autoClassDiagramBoxBorderColor);
+                plantUmlLines.unshift("skinparam ClassBorderColor " + this.options.autoClassDiagramBoxBorderColor);
+            }
+
+            if (this.options.autoClassDiagramBoxBorderWidth >= 0) {
+                plantUmlLines.unshift("skinparam ClassBorderThickness " + this.options.autoClassDiagramBoxBorderWidth);
             }
 
             if (this.options.autoClassDiagramArrowColor) {
-                plantUmlLines.unshift("skinparam classArrowColor " + this.options.autoClassDiagramArrowColor);
+                plantUmlLines.unshift("skinparam ClassArrowColor " + this.options.autoClassDiagramArrowColor);
             }
 
             if (this.options.autoClassDiagramClassFontName) {
-                plantUmlLines.unshift("skinparam classFontName " + this.options.autoClassDiagramClassFontName);
+                plantUmlLines.unshift("skinparam ClassFontName " + this.options.autoClassDiagramClassFontName);
             }
 
             if (this.options.autoClassDiagramClassFontSize) {
-                plantUmlLines.unshift("skinparam classFontSize " + this.options.autoClassDiagramClassFontSize);
+                plantUmlLines.unshift("skinparam ClassFontSize " + this.options.autoClassDiagramClassFontSize);
             }
 
             if (this.options.autoClassDiagramClassFontStyle) {
-                plantUmlLines.unshift("skinparam classFontStyle " + this.options.autoClassDiagramClassFontStyle);
+                plantUmlLines.unshift("skinparam ClassFontStyle " + this.options.autoClassDiagramClassFontStyle);
             }
 
             if (this.options.autoClassDiagramClassFontColor) {
-                plantUmlLines.unshift("skinparam classFontColor " + this.options.autoClassDiagramClassFontColor);
+                plantUmlLines.unshift("skinparam ClassFontColor " + this.options.autoClassDiagramClassFontColor);
             }
         }
 

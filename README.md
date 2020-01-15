@@ -85,6 +85,9 @@ Use the first of the following options to enable this feature and the other opti
 -   `--umlClassDiagramBoxBorderRadius <integer>`<br>
     Use this option to specify the border radius of the boxes within the class diagram.
     Unit is pixel. Default value is `0`.
+-   `--umlClassDiagramBoxBorderWidth <integer>`<br>
+    Use this option to specify the border width of the boxes within the class diagram.
+    Unit is pixel. Default is the PlantUML default value for this skin parameter.
 -   `--umlClassDiagramArrowColor <transparent|#RGBHEX>`<br>
     Use this option to specify the color of the arrows within the class diagram.
     Default is the PlantUML default value for this skin parameter.
