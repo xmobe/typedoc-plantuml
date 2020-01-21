@@ -336,6 +336,12 @@ export class PlantUmlPlugin extends PluginBase {
                         this.options.autoClassDiagramClassAttributeFontStyle.toString()
                 );
             }
+
+            if (this.options.autoClassDiagramClassAttributeFontColor) {
+                plantUmlLines.unshift(
+                    "skinparam ClassAttributeFontColor " + this.options.autoClassDiagramClassAttributeFontColor
+                );
+            }
         }
 
         return plantUmlLines;

@@ -116,6 +116,9 @@ Use the first of the following options to enable this feature and the other opti
 -   `--umlClassDiagramClassAttributeFontStyle <normal|plain|italic|bold>`<br>
     Use this option to specify the style of the font used for the class attributes within the class diagram.
     Default is the PlantUML default value for this skin parameter.
+-   `--umlClassDiagramClassAttributeFontColor <transparent|#RGBHEX>`<br>
+    Use this option to specify the color of the class attributes within the class diagram.
+    Default is the PlantUML default value for this skin parameter.
 
 ## License
 

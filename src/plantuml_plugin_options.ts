@@ -126,6 +126,9 @@ export class PlantUmlPluginOptions {
     /** Specifies the font style for the class attributes in automatically created class diagrams. */
     protected autoClassDiagramClassAttributeFontStyleOption: PluginEnumOption<FontStyle>;
 
+    /** Specifies the font color for the class attributes in automatically created class diagrams. */
+    protected autoClassDiagramClassAttributeFontColorOption: PluginStringOption;
+
     /**
      * Intializes a new plugin options instance.
      */
@@ -298,6 +301,12 @@ export class PlantUmlPluginOptions {
                 ["bold", FontStyle.Bold],
             ])
         );
+
+        this.autoClassDiagramClassAttributeFontColorOption = new PluginStringOption(
+            "umlClassDiagramClassAttributeFontColor",
+            "transparent|#RGBHEX",
+            ""
+        );
     }
 
     /**
@@ -326,6 +335,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramClassAttributeFontNameOption.addToApplication(typedoc);
         this.autoClassDiagramClassAttributeFontSizeOption.addToApplication(typedoc);
         this.autoClassDiagramClassAttributeFontStyleOption.addToApplication(typedoc);
+        this.autoClassDiagramClassAttributeFontColorOption.addToApplication(typedoc);
     }
 
     /**
@@ -354,6 +364,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramClassAttributeFontNameOption.readValueFromApplication(typedoc);
         this.autoClassDiagramClassAttributeFontSizeOption.readValueFromApplication(typedoc);
         this.autoClassDiagramClassAttributeFontStyleOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramClassAttributeFontColorOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -540,5 +551,15 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramClassAttributeFontStyle(): FontStyle {
         return this.autoClassDiagramClassAttributeFontStyleOption.val;
+    }
+
+    /**
+     * Returns the font color that should be used for the class attributes in automatically created class diagrams.
+     * @returns The font color that should be used for the class attributes in automatically created class diagrams.
+     *          An empty string if no value was specified by the caller.
+     *          In this case the PlantUML default value should be used.
+     */
+    get autoClassDiagramClassAttributeFontColor(): string {
+        return this.autoClassDiagramClassAttributeFontColorOption.val;
     }
 }
