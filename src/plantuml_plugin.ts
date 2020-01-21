@@ -10,6 +10,7 @@ import {
     ClassDiagramMemberVisibilityStyle,
     ClassDiagramPosition,
     ClassDiagramType,
+    FontStyle,
     ImageFormat,
     ImageLocation,
     PlantUmlPluginOptions,
@@ -307,8 +308,10 @@ export class PlantUmlPlugin extends PluginBase {
                 plantUmlLines.unshift("skinparam ClassFontSize " + this.options.autoClassDiagramClassFontSize);
             }
 
-            if (this.options.autoClassDiagramClassFontStyle) {
-                plantUmlLines.unshift("skinparam ClassFontStyle " + this.options.autoClassDiagramClassFontStyle);
+            if (this.options.autoClassDiagramClassFontStyle !== FontStyle.Undefined) {
+                plantUmlLines.unshift(
+                    "skinparam ClassFontStyle " + this.options.autoClassDiagramClassFontStyle.toString()
+                );
             }
 
             if (this.options.autoClassDiagramClassFontColor) {
@@ -324,6 +327,13 @@ export class PlantUmlPlugin extends PluginBase {
             if (this.options.autoClassDiagramClassAttributeFontSize) {
                 plantUmlLines.unshift(
                     "skinparam ClassAttributeFontSize " + this.options.autoClassDiagramClassAttributeFontSize
+                );
+            }
+
+            if (this.options.autoClassDiagramClassAttributeFontStyle !== FontStyle.Undefined) {
+                plantUmlLines.unshift(
+                    "skinparam ClassAttributeFontStyle " +
+                        this.options.autoClassDiagramClassAttributeFontStyle.toString()
                 );
             }
         }

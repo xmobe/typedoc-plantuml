@@ -113,6 +113,9 @@ Use the first of the following options to enable this feature and the other opti
 -   `--umlClassDiagramClassAttributeFontSize <integer>`<br>
     Use this option to specify the font size of the class attributes within the class diagram.
     Unit is pixel. Default value is the PlantUML default value for this skin parameter.
+-   `--umlClassDiagramClassAttributeFontStyle <normal|plain|italic|bold>`<br>
+    Use this option to specify the style of the font used for the class attributes within the class diagram.
+    Default is the PlantUML default value for this skin parameter.
 
 ## License
 

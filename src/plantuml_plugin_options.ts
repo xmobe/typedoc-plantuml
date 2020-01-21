@@ -46,6 +46,17 @@ export enum ClassDiagramMemberVisibilityStyle {
 }
 
 /**
+ * Font styles supported by PlantUML.
+ */
+export enum FontStyle {
+    Undefined = "",
+    Normal = "normal",
+    Plain = "plain",
+    Italic = "italic",
+    Bold = "bold",
+}
+
+/**
  * Class storing the options of the plugin.
  */
 export class PlantUmlPluginOptions {
@@ -101,7 +112,7 @@ export class PlantUmlPluginOptions {
     protected autoClassDiagramClassFontSizeOption: PluginNumberOption;
 
     /** Specifies the font style for the class name in automatically created class diagrams. */
-    protected autoClassDiagramClassFontStyleOption: PluginStringOption;
+    protected autoClassDiagramClassFontStyleOption: PluginEnumOption<FontStyle>;
 
     /** Specifies the font color for the class name in automatically created class diagrams. */
     protected autoClassDiagramClassFontColorOption: PluginStringOption;
@@ -111,6 +122,9 @@ export class PlantUmlPluginOptions {
 
     /** Specifies the font size for the class attributes in automatically created class diagrams. */
     protected autoClassDiagramClassAttributeFontSizeOption: PluginNumberOption;
+
+    /** Specifies the font style for the class attributes in automatically created class diagrams. */
+    protected autoClassDiagramClassAttributeFontStyleOption: PluginEnumOption<FontStyle>;
 
     /**
      * Intializes a new plugin options instance.
@@ -241,10 +255,16 @@ export class PlantUmlPluginOptions {
             Infinity
         );
 
-        this.autoClassDiagramClassFontStyleOption = new PluginStringOption(
+        this.autoClassDiagramClassFontStyleOption = new PluginEnumOption<FontStyle>(
             "umlClassDiagramClassFontStyle",
             "normal|plain|italic|bold",
-            ""
+            FontStyle.Undefined,
+            new Map([
+                ["normal", FontStyle.Normal],
+                ["plain", FontStyle.Plain],
+                ["italic", FontStyle.Italic],
+                ["bold", FontStyle.Bold],
+            ])
         );
 
         this.autoClassDiagramClassFontColorOption = new PluginStringOption(
@@ -265,6 +285,18 @@ export class PlantUmlPluginOptions {
             0,
             0,
             Infinity
+        );
+
+        this.autoClassDiagramClassAttributeFontStyleOption = new PluginEnumOption<FontStyle>(
+            "umlClassDiagramClassAttributeFontStyle",
+            "normal|plain|italic|bold",
+            FontStyle.Undefined,
+            new Map([
+                ["normal", FontStyle.Normal],
+                ["plain", FontStyle.Plain],
+                ["italic", FontStyle.Italic],
+                ["bold", FontStyle.Bold],
+            ])
         );
     }
 
@@ -293,6 +325,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramClassFontColorOption.addToApplication(typedoc);
         this.autoClassDiagramClassAttributeFontNameOption.addToApplication(typedoc);
         this.autoClassDiagramClassAttributeFontSizeOption.addToApplication(typedoc);
+        this.autoClassDiagramClassAttributeFontStyleOption.addToApplication(typedoc);
     }
 
     /**
@@ -320,6 +353,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramClassFontColorOption.readValueFromApplication(typedoc);
         this.autoClassDiagramClassAttributeFontNameOption.readValueFromApplication(typedoc);
         this.autoClassDiagramClassAttributeFontSizeOption.readValueFromApplication(typedoc);
+        this.autoClassDiagramClassAttributeFontStyleOption.readValueFromApplication(typedoc);
     }
 
     /**
@@ -465,10 +499,8 @@ export class PlantUmlPluginOptions {
     /**
      * Returns the font style that should be used for the class name in automatically created class diagrams.
      * @returns The font style that should be used for the class name in automatically created class diagrams.
-     *          An empty string if no value was specified by the caller.
-     *          In this case the PlantUML default value should be used.
      */
-    get autoClassDiagramClassFontStyle(): string {
+    get autoClassDiagramClassFontStyle(): FontStyle {
         return this.autoClassDiagramClassFontStyleOption.val;
     }
 
@@ -500,5 +532,13 @@ export class PlantUmlPluginOptions {
      */
     get autoClassDiagramClassAttributeFontSize(): number {
         return this.autoClassDiagramClassAttributeFontSizeOption.val;
+    }
+
+    /**
+     * Returns the font style that should be used for the class attributes in automatically created class diagrams.
+     * @returns The font style that should be used for the class attributes in automatically created class diagrams.
+     */
+    get autoClassDiagramClassAttributeFontStyle(): FontStyle {
+        return this.autoClassDiagramClassAttributeFontStyleOption.val;
     }
 }
