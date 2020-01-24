@@ -233,7 +233,7 @@ export class PlantUmlPluginOptions {
         this.autoClassDiagramBoxBorderWidthOption = new PluginNumberOption(
             "umlClassDiagramBoxBorderWidth",
             "The box border width in pixel used when automatically creating class diagrams.",
-            NaN, // abuse NaN here, because 0 can be used to hide borders
+            -1, // because 0 can be used to hide borders
             0,
             Infinity
         );
@@ -470,7 +470,7 @@ export class PlantUmlPluginOptions {
     /**
      * Returns the border width that should be used for boxes in automatically created class diagrams.
      * @returns The border width that should be used for boxes in automatically created class diagrams.
-     *          The NaN value if no value was specified by the caller.
+     *          The value -1 if no value was specified by the caller.
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramBoxBorderWidth(): number {
