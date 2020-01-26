@@ -2,7 +2,7 @@
 const plantuml = require("node-plantuml"); // there are no type definitions for this module :-(
 import * as fs from "fs";
 import * as path from "path";
-import { Application, DeclarationReflection, ReflectionKind } from "typedoc";
+import { Application, DeclarationReflection, Reflection, ReflectionKind } from "typedoc";
 import { PluginBase } from "typedoc-plugin-base/dist/plugin_base";
 import { Context, Converter } from "typedoc/dist/lib/converter";
 import { PageEvent, RendererEvent } from "typedoc/dist/lib/output/events";
@@ -20,10 +20,27 @@ import { TypeDocUtils } from "./typedoc_utils";
 
 /**
  * The PlantUML plugin.
+ *
+ * # What does it do?
+ *
+ * This plugin replaces PlantUML diagrams embedded in UML tags within comments by images.
+ *
+ * # How does it do it?
+ *
+ * 1. If the plugin option for automatically creating UML diagrams is enabled the plugin scans through
+ *    all declaration reflections' comments and injects a UML tag into them. The UML tag contains the
+ *    PlantUML code that represents the class diagram for that reflection.
+ *
+ * 2. The plugin replaces each UML tag within a comment by markdown for an image with a URL to
+ *    the official PlantUML server. The URL contains the encoded PlantUML lines from the UML tag.
+ *
+ * 3. If the plugin option for generating local images is enabled the plugin uses the node-plantuml
+ *    module to generate image files out of the image URLs from step one and stores them as local files.
+ *    The markdown for the images is updated respectively.
  */
 export class PlantUmlPlugin extends PluginBase {
-    /** The directory in which TypeDoc is generating the output. */
-    protected typeDocOutputDirectory!: string;
+    /** The directory in which TypeDoc (and this plugin) is generating the images. */
+    protected typeDocImageDirectory!: string;
 
     /** Number of generated local image files. */
     protected numberOfGeneratedImages = 0;
@@ -70,130 +87,60 @@ export class PlantUmlPlugin extends PluginBase {
     public onConverterResolveEnd(context: Context): void {
         const project = context.project;
 
-        // go through all the comments
+        // go through all the reflections' comments
         for (const key in project.reflections) {
             if (project.reflections.hasOwnProperty(key)) {
                 const reflection = project.reflections[key];
 
                 if (reflection && reflection.comment) {
-                    // add UML tag for class diagram only for classes and interfaces with a comment
-                    if (
-                        (this.options.autoClassDiagramType === ClassDiagramType.Simple ||
-                            this.options.autoClassDiagramType === ClassDiagramType.Detailed) &&
-                        reflection instanceof DeclarationReflection &&
-                        (reflection.kind === ReflectionKind.Class || reflection.kind === ReflectionKind.Interface) &&
-                        reflection.comment
-                    ) {
-                        const classDiagramPlantUmlLines = this.getClassDiagramPlantUmlForReflection(reflection);
-
-                        if (classDiagramPlantUmlLines.length > 0) {
-                            if (this.options.autoClassDiagramPosition === ClassDiagramPosition.Above) {
-                                reflection.comment.shortText =
-                                    "<uml>\n" +
-                                    classDiagramPlantUmlLines.join("\n") +
-                                    "\n</uml>  \n" + // the two spaces are needed to generate a line break in markdown
-                                    reflection.comment.shortText;
-                            } else {
-                                reflection.comment.text =
-                                    reflection.comment.text +
-                                    "\n<uml>\n" +
-                                    classDiagramPlantUmlLines.join("\n") +
-                                    "\n</uml>";
-                            }
-                        }
+                    if (this.shouldCreateClassDiagramForReflection(reflection)) {
+                        this.insertUmlTagWithClassDiagramIntoCommentOfReflection(reflection);
                     }
 
-                    // convert UML tags to PlantUML image links
-                    if (reflection.comment) {
-                        reflection.comment.shortText = this.handleUmlTags(reflection.comment.shortText);
-                        reflection.comment.text = this.handleUmlTags(reflection.comment.text);
-                    }
+                    this.handleUmlTagsInCommentOfReflection(reflection);
                 }
             }
         }
     }
 
     /**
-     * Triggered before the renderer starts rendering a project.
-     * @param event The event emitted by the renderer class.
+     * Returns if a class diagram should be generated for the given reflection.
+     * @param reflection The reflection for which the question is asked.
+     * @returns True, if a class diagram should be generated for the given reflection, otherwise false.
      */
-    public onRendererBegin(event: RendererEvent): void {
-        this.typeDocOutputDirectory = path.join(event.outputDirectory, "assets/images/");
+    protected shouldCreateClassDiagramForReflection(reflection: Reflection): reflection is DeclarationReflection {
+        if (
+            (this.options.autoClassDiagramType === ClassDiagramType.Simple ||
+                this.options.autoClassDiagramType === ClassDiagramType.Detailed) &&
+            reflection instanceof DeclarationReflection &&
+            (reflection.kind === ReflectionKind.Class || reflection.kind === ReflectionKind.Interface) &&
+            reflection.comment
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Triggered after the renderer has written all documents.
-     * @param event The event emitted by the renderer class.
+     * Inserts an UML tag containing the PlantUML for a class diagram into the comment of the reflection.
+     * @param reflection The reflection whoes comment should be manipulated.
      */
-    public onRendererEnd(event: RendererEvent): void {
-        // append style to main.css
-        const filename = path.join(event.outputDirectory, "assets/css/main.css");
-        const data = fs.readFileSync(filename, "utf8") + "\n.uml { max-width: 100%; }\n";
-        fs.writeFileSync(filename, data, "utf8");
-    }
+    protected insertUmlTagWithClassDiagramIntoCommentOfReflection(reflection: DeclarationReflection): void {
+        if (reflection.comment) {
+            const classDiagramPlantUmlLines = this.getClassDiagramPlantUmlForReflection(reflection);
 
-    /**
-     * Triggered after a document has been rendered, just before it is written to disc.
-     * Generates local image files and updates the image urls in the comments.
-     * @param event The event emitted by the renderer class.
-     */
-    public onRendererEndPage(event: PageEvent): void {
-        // regexp for finding PlantUML image tags
-        const encodedUmlExpression = /<img src="http:\/\/www\.plantuml\.com\/plantuml\/(?:img|png|svg)\/([^"]*)"(?: alt="(.*)")?>/g;
-
-        // replace the external urls with local ones
-        // rewrite the image links to: 1) generate local images, 2) transform to <object> tag for svg, 3) add css class
-        const contents = event.contents;
-
-        if (contents) {
-            let index = 0;
-            const segments = new Array<string>();
-
-            let match = encodedUmlExpression.exec(contents);
-
-            while (match != null) {
-                segments.push(contents.substring(index, match.index));
-
-                // get the image source
-                let src = match[1];
-                const alt = match[2];
-
-                // decode image and write to disk if using local images
-                if (this.options.outputImageLocation === ImageLocation.Local) {
-                    src = this.writeLocalImage(event.filename, src);
+            if (classDiagramPlantUmlLines.length > 0) {
+                if (this.options.autoClassDiagramPosition === ClassDiagramPosition.Above) {
+                    reflection.comment.shortText =
+                        "<uml>\n" +
+                        classDiagramPlantUmlLines.join("\n") +
+                        "\n</uml>  \n" + // the two spaces are needed to generate a line break in markdown
+                        reflection.comment.shortText;
                 } else {
-                    // this is the case where we have a remote file, so we don't need to write out the image but
-                    // we need to add the server back into the image source since it was removed by the regex
-                    src = PlantUmlUtils.plantUmlServerUrl + this.options.outputImageFormat.toString() + "/" + src;
+                    reflection.comment.text =
+                        reflection.comment.text + "\n<uml>\n" + classDiagramPlantUmlLines.join("\n") + "\n</uml>";
                 }
-
-                // re-write image tag
-                if (this.options.outputImageFormat === ImageFormat.PNG) {
-                    segments.push('<img class="uml" src=');
-                    // replace external path in content with path to image to assets directory
-                    segments.push('"' + src + '"');
-                    if (alt) {
-                        segments.push(' alt="' + alt + '"');
-                    }
-                    segments.push(">");
-                } else {
-                    segments.push('<object type="image/svg+xml" class="uml" data="');
-                    segments.push(src);
-                    segments.push('">');
-                    if (alt) {
-                        segments.push(alt);
-                    }
-                    segments.push("</object>");
-                }
-
-                index = match.index + match[0].length;
-                match = encodedUmlExpression.exec(contents);
-            }
-
-            // write modified contents back to page
-            if (segments.length > 0) {
-                segments.push(contents.substring(index, contents.length));
-                event.contents = segments.join("");
             }
         }
     }
@@ -348,6 +295,17 @@ export class PlantUmlPlugin extends PluginBase {
     }
 
     /**
+     * Convert UML tags within the comment of the reflection into PlantUML image links.
+     * @param reflection The reflection whoes comment should be manipulated.
+     */
+    protected handleUmlTagsInCommentOfReflection(reflection: Reflection): void {
+        if (reflection.comment) {
+            reflection.comment.shortText = this.handleUmlTags(reflection.comment.shortText);
+            reflection.comment.text = this.handleUmlTags(reflection.comment.text);
+        }
+    }
+
+    /**
      * Replaces UML-tags in a comment with Markdown image links.
      * @param text The text of the comment to process.
      * @returns The processed text of the comment.
@@ -395,6 +353,91 @@ export class PlantUmlPlugin extends PluginBase {
     }
 
     /**
+     * Triggered before the renderer starts rendering a project.
+     * @param event The event emitted by the renderer class.
+     */
+    public onRendererBegin(event: RendererEvent): void {
+        this.typeDocImageDirectory = path.join(event.outputDirectory, "assets/images/");
+    }
+
+    /**
+     * Triggered after the renderer has written all documents.
+     * @param event The event emitted by the renderer class.
+     */
+    public onRendererEnd(event: RendererEvent): void {
+        // append style to main.css
+        const filename = path.join(event.outputDirectory, "assets/css/main.css");
+        const data = fs.readFileSync(filename, "utf8") + "\n.uml { max-width: 100%; }\n";
+        fs.writeFileSync(filename, data, "utf8");
+    }
+
+    /**
+     * Triggered after a document has been rendered, just before it is written to disc.
+     * Generates local image files and updates the image urls in the comments.
+     * @param event The event emitted by the renderer class.
+     */
+    public onRendererEndPage(event: PageEvent): void {
+        // regexp for finding PlantUML image tags
+        const encodedUmlExpression = /<img src="http:\/\/www\.plantuml\.com\/plantuml\/(?:img|png|svg)\/([^"]*)"(?: alt="(.*)")?>/g;
+
+        // replace the external urls with local ones
+        // rewrite the image links to: 1) generate local images, 2) transform to <object> tag for svg, 3) add css class
+        const contents = event.contents;
+
+        if (contents) {
+            let index = 0;
+            const segments = new Array<string>();
+
+            let match = encodedUmlExpression.exec(contents);
+
+            while (match != null) {
+                segments.push(contents.substring(index, match.index));
+
+                // get the image source
+                let src = match[1];
+                const alt = match[2];
+
+                // decode image and write to disk if using local images
+                if (this.options.outputImageLocation === ImageLocation.Local) {
+                    src = this.writeLocalImage(event.filename, src);
+                } else {
+                    // this is the case where we have a remote file, so we don't need to write out the image but
+                    // we need to add the server back into the image source since it was removed by the regex
+                    src = PlantUmlUtils.plantUmlServerUrl + this.options.outputImageFormat.toString() + "/" + src;
+                }
+
+                // re-write image tag
+                if (this.options.outputImageFormat === ImageFormat.PNG) {
+                    segments.push('<img class="uml" src=');
+                    // replace external path in content with path to image to assets directory
+                    segments.push('"' + src + '"');
+                    if (alt) {
+                        segments.push(' alt="' + alt + '"');
+                    }
+                    segments.push(">");
+                } else {
+                    segments.push('<object type="image/svg+xml" class="uml" data="');
+                    segments.push(src);
+                    segments.push('">');
+                    if (alt) {
+                        segments.push(alt);
+                    }
+                    segments.push("</object>");
+                }
+
+                index = match.index + match[0].length;
+                match = encodedUmlExpression.exec(contents);
+            }
+
+            // write modified contents back to page
+            if (segments.length > 0) {
+                segments.push(contents.substring(index, contents.length));
+                event.contents = segments.join("");
+            }
+        }
+    }
+
+    /**
      * Writes a class diagram as a local image to the disc.
      * @param pageFilename The filename of the generated TypeDoc page.
      * @param src The image URL of the class diagram.
@@ -407,7 +450,7 @@ export class PlantUmlPlugin extends PluginBase {
 
         // get image filename
         const filename = "uml" + ++this.numberOfGeneratedImages + "." + this.options.outputImageFormat.toString();
-        const imagePath = path.join(this.typeDocOutputDirectory, filename);
+        const imagePath = path.join(this.typeDocImageDirectory, filename);
 
         // decode and save png to assets directory
         decode.out.pipe(gen.in);
