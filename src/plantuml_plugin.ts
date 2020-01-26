@@ -45,12 +45,12 @@ export class PlantUmlPlugin extends PluginBase {
      * @param typedoc The TypeDoc application.
      */
     protected subscribeToApplicationEvents(typedoc: Application): void {
-        typedoc.converter.on(Converter.EVENT_RESOLVE_BEGIN, (context: Context) => this.onResolveBegin(context));
-        typedoc.converter.on(Converter.EVENT_RESOLVE_END, (context: Context) => this.onResolveEnd(context));
+        typedoc.converter.on(Converter.EVENT_RESOLVE_BEGIN, (c: Context) => this.onConverterResolveBegin(c));
+        typedoc.converter.on(Converter.EVENT_RESOLVE_END, (c: Context) => this.onConverterResolveEnd(c));
 
-        typedoc.renderer.on(RendererEvent.BEGIN, (event: RendererEvent) => this.onBeginRender(event));
-        typedoc.renderer.on(RendererEvent.END, (event: RendererEvent) => this.onEndRender(event));
-        typedoc.renderer.on(PageEvent.END, (event: PageEvent) => this.onEndPage(event));
+        typedoc.renderer.on(RendererEvent.BEGIN, (e: RendererEvent) => this.onRendererBegin(e));
+        typedoc.renderer.on(RendererEvent.END, (e: RendererEvent) => this.onRendererEnd(e));
+        typedoc.renderer.on(PageEvent.END, (e: PageEvent) => this.onRendererEndPage(e));
     }
 
     /**
@@ -58,7 +58,7 @@ export class PlantUmlPlugin extends PluginBase {
      * Reads plugin parameter values.
      * @param context Describes the current state the converter is in.
      */
-    public onResolveBegin(context: Context): void {
+    public onConverterResolveBegin(context: Context): void {
         this.options.readValuesFromApplication(context.converter.owner.application);
     }
 
@@ -67,7 +67,7 @@ export class PlantUmlPlugin extends PluginBase {
      * Replaces UML tags in comments with image links to encoded UML data.
      * @param context Describes the current state the converter is in.
      */
-    public onResolveEnd(context: Context): void {
+    public onConverterResolveEnd(context: Context): void {
         const project = context.project;
 
         // go through all the comments
@@ -117,7 +117,7 @@ export class PlantUmlPlugin extends PluginBase {
      * Triggered before the renderer starts rendering a project.
      * @param event The event emitted by the renderer class.
      */
-    public onBeginRender(event: RendererEvent): void {
+    public onRendererBegin(event: RendererEvent): void {
         this.typeDocOutputDirectory = path.join(event.outputDirectory, "assets/images/");
     }
 
@@ -125,7 +125,7 @@ export class PlantUmlPlugin extends PluginBase {
      * Triggered after the renderer has written all documents.
      * @param event The event emitted by the renderer class.
      */
-    public onEndRender(event: RendererEvent): void {
+    public onRendererEnd(event: RendererEvent): void {
         // append style to main.css
         const filename = path.join(event.outputDirectory, "assets/css/main.css");
         const data = fs.readFileSync(filename, "utf8") + "\n.uml { max-width: 100%; }\n";
@@ -137,7 +137,7 @@ export class PlantUmlPlugin extends PluginBase {
      * Generates local image files and updates the image urls in the comments.
      * @param event The event emitted by the renderer class.
      */
-    public onEndPage(event: PageEvent): void {
+    public onRendererEndPage(event: PageEvent): void {
         // regexp for finding PlantUML image tags
         const encodedUmlExpression = /<img src="http:\/\/www\.plantuml\.com\/plantuml\/(?:img|png|svg)\/([^"]*)"(?: alt="(.*)")?>/g;
 
