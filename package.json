@@ -1,73 +1,43 @@
 {
-    "_from": "typedoc-plantuml",
-    "_id": "typedoc-plantuml@2.0.0",
-    "_inBundle": false,
-    "_integrity": "sha1-OdOgKP+DccIqA5u5oMJHBcBbVgg=",
-    "_location": "/typedoc-plantuml",
-    "_phantomChildren": {},
-    "_requested": {
-        "type": "tag",
-        "registry": true,
-        "raw": "typedoc-plantuml",
-        "name": "typedoc-plantuml",
-        "escapedName": "typedoc-plantuml",
-        "rawSpec": "",
-        "saveSpec": null,
-        "fetchSpec": "latest"
-    },
-    "_requiredBy": [
-        "#USER",
-        "/"
-    ],
-    "_resolved": "https://registry.npmjs.org/typedoc-plantuml/-/typedoc-plantuml-1.4.1.tgz",
-    "_shasum": "39d3a028ff8371c22a039bb9a0c24705c05b5608",
-    "_spec": "typedoc-plantuml",
-    "_where": "C:\\MyProjects\\typedoc\\typedoc-plantuml-ts",
+    "name": "typedoc-plantuml2",
+    "version": "1.0.0",
+    "description": "Plugin for TypeDoc that generates images for PlantUML diagrams embedded in comments.",
     "author": {
         "name": "Artifact Health, Inc",
         "url": "http://www.artifacthealth.com"
     },
-    "bugs": {
-        "url": "https://github.com/artifacthealth/typedoc-plantuml/issues"
-    },
-    "dependencies": {
-        "node-plantuml": "^0.4.4",
-        "pako": "^1.0.0",
-        "typedoc-plugin-base": "^1.3.1"
-    },
-    "deprecated": false,
-    "description": "Plugin for TypeDoc that generates images for PlantUML diagrams embedded in comments.",
-    "devDependencies": {
-        "@types/node": "^12.12.21",
-        "@types/pako": "^1.0.1",
-        "prettier": "^1.19.1",
-        "tslint": "^5.20.1",
-        "typedoc": "^0.16.8",
-        "typescript": "^3.7.5"
-    },
-    "homepage": "https://github.com/artifacthealth/typedoc-plantuml#readme",
+    "license": "Apache-2.0",
     "keywords": [
         "uml",
         "plantuml",
         "typedoc",
         "typedocplugin"
     ],
-    "license": "Apache-2.0",
-    "main": "dist/index.js",
-    "name": "typedoc-plantuml",
+    "dependencies": {
+        "node-plantuml": "^0.4.4",
+        "pako": "^1.0.0",
+        "typedoc-plugin-base": "^1.3.2"
+    },
+    "devDependencies": {
+        "@types/node": "^12.12.21",
+        "@types/pako": "^1.0.1",
+        "prettier": "^1.19.1",
+        "tslint": "^6.1.0",
+        "typedoc": "^0.17.1",
+        "typescript": "^3.8.3"
+    },
     "peerDependencies": {
-        "typedoc": "^0.16.8"
+        "typedoc": "^0.17.1"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/artifacthealth/typedoc-plantuml.git"
     },
-    "scripts": {
-        "build": "tsc",
-        "test": "node tests/run.js"
-    },
-    "version": "2.0.0",
+    "main": "dist/index.js",
     "files": [
         "/dist"
-    ]
+    ],
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    }
 }
