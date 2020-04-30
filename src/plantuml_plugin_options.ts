@@ -1,8 +1,11 @@
-import { Application } from "typedoc";
-import { PluginBooleanOption } from "typedoc-plugin-base/dist/plugin_boolean_option";
-import { PluginEnumOption } from "typedoc-plugin-base/dist/plugin_enum_option";
-import { PluginNumberOption } from "typedoc-plugin-base/dist/plugin_number_option";
-import { PluginStringOption } from "typedoc-plugin-base/dist/plugin_string_option";
+import {
+    Application,
+    ParameterType,
+    MapDeclarationOption,
+    BooleanDeclarationOption,
+    NumberDeclarationOption,
+    StringDeclarationOption,
+} from "typedoc";
 
 /**
  * Supported image output formats.
@@ -61,310 +64,302 @@ export enum FontStyle {
  */
 export class PlantUmlPluginOptions {
     /** The image format used for generating UML diagrams. */
-    protected outputImageFormatOption: PluginEnumOption<ImageFormat>;
+    private outputImageFormatOption = {
+        type: ParameterType.Map,
+        name: "umlFormat",
+        help: "png|svg",
+        defaultValue: ImageFormat.PNG,
+        map: new Map([
+            ["png", ImageFormat.PNG],
+            ["svg", ImageFormat.SVG],
+        ]),
+        value: ImageFormat.PNG,
+    };
 
     /** The location where the generated UML diagrams should be stored. */
-    protected outputImageLocationOption: PluginEnumOption<ImageLocation>;
+    private outputImageLocationOption = {
+        type: ParameterType.Map,
+        name: "umlLocation",
+        help: "local|remote",
+        defaultValue: ImageLocation.Local,
+        map: new Map([
+            ["local", ImageLocation.Local],
+            ["remote", ImageLocation.Remote],
+        ]),
+        value: ImageLocation.Local,
+    };
 
     /** Specifies whether UML class diagrams should be created automatically. */
-    protected autoClassDiagramTypeOption: PluginEnumOption<ClassDiagramType>;
+    private autoClassDiagramTypeOption = {
+        type: ParameterType.Map,
+        name: "umlClassDiagramType",
+        help: "none|simple|detailed",
+        defaultValue: ClassDiagramType.None,
+        map: new Map([
+            ["none", ClassDiagramType.None],
+            ["simple", ClassDiagramType.Simple],
+            ["detailed", ClassDiagramType.Detailed],
+        ]),
+        value: ClassDiagramType.None,
+    };
 
     /** Specifies where on the page the automatically created class diagram should be put. */
-    protected autoClassDiagramPositionOption: PluginEnumOption<ClassDiagramPosition>;
+    private autoClassDiagramPositionOption = {
+        type: ParameterType.Map,
+        name: "umlClassDiagramPosition",
+        help: "above|below",
+        defaultValue: ClassDiagramPosition.Below,
+        map: new Map([
+            ["above", ClassDiagramPosition.Above],
+            ["below", ClassDiagramPosition.Below],
+        ]),
+        value: ClassDiagramPosition.Below,
+    };
 
     /** Specifies whether to hide empty properties and methods in the automatically created class diagram. */
-    protected autoClassDiagramHideEmptyMembersOption: PluginBooleanOption;
+    private autoClassDiagramHideEmptyMembersOption = {
+        type: ParameterType.Boolean,
+        name: "umlClassDiagramHideEmptyMembers",
+        help: "true|false",
+        defaultValue: true,
+        value: true,
+    };
 
     /** Specifies the boundary before swiching from top->down to left->right direction for class diagrams. */
-    protected autoClassDiagramTopDownLayoutMaxSiblingsOption: PluginNumberOption;
+    private autoClassDiagramTopDownLayoutMaxSiblingsOption = {
+        type: ParameterType.Number,
+        name: "umlClassDiagramTopDownLayoutMaxSiblings",
+        help: "An integer indicating the max number of siblings to be used with the default top down layout.",
+        defaultValue: 6,
+        minValue: 0,
+        value: 6,
+    };
 
     /** Specifies whether UML class diagrams should be created automatically. */
-    protected autoClassDiagramMemberVisibilityStyleOption: PluginEnumOption<ClassDiagramMemberVisibilityStyle>;
+    private autoClassDiagramMemberVisibilityStyleOption = {
+        type: ParameterType.Map,
+        name: "umlClassDiagramMemberVisibilityStyle",
+        help: "text|icon",
+        defaultValue: ClassDiagramMemberVisibilityStyle.Icon,
+        map: new Map([
+            ["text", ClassDiagramMemberVisibilityStyle.Text],
+            ["icon", ClassDiagramMemberVisibilityStyle.Icon],
+        ]),
+        value: ClassDiagramMemberVisibilityStyle.Icon,
+    };
 
     /**
      * Specifies whether to hide the circled character in front of class names
      * in the automatically created class diagram.
      */
-    protected autoClassDiagramHideCircledCharOption: PluginBooleanOption;
+    private autoClassDiagramHideCircledCharOption = {
+        type: ParameterType.Boolean,
+        name: "umlClassDiagramHideCircledChar",
+        help: "true|false",
+        defaultValue: false,
+        value: false,
+    };
 
     /** Specifies whether to hide the shadowing in the automatically created class diagrams */
-    protected autoClassDiagramHideShadowOption: PluginBooleanOption;
+    private autoClassDiagramHideShadowOption = {
+        type: ParameterType.Boolean,
+        name: "umlClassDiagramHideShadow",
+        help: "true|false",
+        defaultValue: false,
+        value: false,
+    };
 
     /** Specifies the background color used for boxes in automatically created class diagrams. */
-    protected autoClassDiagramBoxBackgroundColorOption: PluginStringOption;
+    private autoClassDiagramBoxBackgroundColorOption = {
+        type: ParameterType.String,
+        name: "umlClassDiagramBoxBackgroundColor",
+        help: "transparent|#RGBHEX",
+        defaultValue: "",
+        value: "",
+    };
 
     /** Specifies the border color used for boxes in automatically created class diagrams. */
-    protected autoClassDiagramBoxBorderColorOption: PluginStringOption;
+    private autoClassDiagramBoxBorderColorOption = {
+        type: ParameterType.String,
+        name: "umlClassDiagramBoxBorderColor",
+        help: "transparent|#RGBHEX",
+        defaultValue: "",
+        value: "",
+    };
 
     /** Specifies the border radius used for boxes in automatically created class diagrams. */
-    protected autoClassDiagramBoxBorderRadiusOption: PluginNumberOption;
+    private autoClassDiagramBoxBorderRadiusOption = {
+        type: ParameterType.Number,
+        name: "umlClassDiagramBoxBorderRadius",
+        help: "The box border radius in pixel used when automatically creating class diagrams.",
+        defaultValue: 0,
+        minValue: 0,
+        value: 0,
+    };
 
     /** Specifies the border width used for boxes in automatically created class diagrams. */
-    protected autoClassDiagramBoxBorderWidthOption: PluginNumberOption;
+    private autoClassDiagramBoxBorderWidthOption = {
+        type: ParameterType.Number,
+        name: "umlClassDiagramBoxBorderWidth",
+        help: "The box border width in pixel used when automatically creating class diagrams.",
+        defaultValue: -1, // because 0 can be used to hide borders
+        minValue: 0,
+        value: -1,
+    };
 
     /** Specifies the color used for arrows in automatically created class diagrams. */
-    protected autoClassDiagramArrowColorOption: PluginStringOption;
+    private autoClassDiagramArrowColorOption = {
+        type: ParameterType.String,
+        name: "umlClassDiagramArrowColor",
+        help: "transparent|#RGBHEX",
+        defaultValue: "",
+        value: "",
+    };
 
     /** Specifies the name of the font used for the class name in automatically created class diagrams. */
-    protected autoClassDiagramClassFontNameOption: PluginStringOption;
+    private autoClassDiagramClassFontNameOption = {
+        type: ParameterType.String,
+        name: "umlClassDiagramClassFontName",
+        help: "The name of the font used for the class name when automatically creating class diagrams.",
+        defaultValue: "",
+        value: "",
+    };
 
     /** Specifies the font size for the class name in automatically created class diagrams. */
-    protected autoClassDiagramClassFontSizeOption: PluginNumberOption;
+    private autoClassDiagramClassFontSizeOption = {
+        type: ParameterType.Number,
+        name: "umlClassDiagramClassFontSize",
+        help: "The font size in pixel used for the class name when automatically creating class diagrams.",
+        defaultValue: 0,
+        minValue: 0,
+        value: 0,
+    };
 
     /** Specifies the font style for the class name in automatically created class diagrams. */
-    protected autoClassDiagramClassFontStyleOption: PluginEnumOption<FontStyle>;
+    private autoClassDiagramClassFontStyleOption = {
+        type: ParameterType.Map,
+        name: "umlClassDiagramClassFontStyle",
+        help: "normal|plain|italic|bold",
+        defaultValue: FontStyle.Undefined,
+        map: new Map([
+            ["normal", FontStyle.Normal],
+            ["plain", FontStyle.Plain],
+            ["italic", FontStyle.Italic],
+            ["bold", FontStyle.Bold],
+        ]),
+        value: FontStyle.Undefined,
+    };
 
     /** Specifies the font color for the class name in automatically created class diagrams. */
-    protected autoClassDiagramClassFontColorOption: PluginStringOption;
+    private autoClassDiagramClassFontColorOption = {
+        type: ParameterType.String,
+        name: "umlClassDiagramClassFontColor",
+        help: "transparent|#RGBHEX",
+        defaultValue: "",
+        value: "",
+    };
 
     /** Specifies the name of the font used for the class attributes in automatically created class diagrams. */
-    protected autoClassDiagramClassAttributeFontNameOption: PluginStringOption;
+    private autoClassDiagramClassAttributeFontNameOption = {
+        type: ParameterType.String,
+        name: "umlClassDiagramClassAttributeFontName",
+        help: "The name of the font used for the class attributes when automatically creating class diagrams.",
+        defaultValue: "",
+        value: "",
+    };
 
     /** Specifies the font size for the class attributes in automatically created class diagrams. */
-    protected autoClassDiagramClassAttributeFontSizeOption: PluginNumberOption;
+    private autoClassDiagramClassAttributeFontSizeOption = {
+        type: ParameterType.Number,
+        name: "umlClassDiagramClassAttributeFontSize",
+        help: "The font size in pixel used for the class attributes when automatically creating class diagrams.",
+        defaultValue: 0,
+        minValue: 0,
+        value: 0,
+    };
 
     /** Specifies the font style for the class attributes in automatically created class diagrams. */
-    protected autoClassDiagramClassAttributeFontStyleOption: PluginEnumOption<FontStyle>;
+    private autoClassDiagramClassAttributeFontStyleOption = {
+        type: ParameterType.Map,
+        name: "umlClassDiagramClassAttributeFontStyle",
+        help: "normal|plain|italic|bold",
+        defaultValue: FontStyle.Undefined,
+        map: new Map([
+            ["normal", FontStyle.Normal],
+            ["plain", FontStyle.Plain],
+            ["italic", FontStyle.Italic],
+            ["bold", FontStyle.Bold],
+        ]),
+        value: FontStyle.Undefined,
+    };
 
     /** Specifies the font color for the class attributes in automatically created class diagrams. */
-    protected autoClassDiagramClassAttributeFontColorOption: PluginStringOption;
-
-    /**
-     * Intializes a new plugin options instance.
-     */
-    constructor() {
-        this.outputImageFormatOption = new PluginEnumOption<ImageFormat>(
-            "umlFormat",
-            "png|svg",
-            ImageFormat.PNG,
-            new Map([
-                ["png", ImageFormat.PNG],
-                ["svg", ImageFormat.SVG],
-            ])
-        );
-
-        this.outputImageLocationOption = new PluginEnumOption<ImageLocation>(
-            "umlLocation",
-            "local|remote",
-            ImageLocation.Local,
-            new Map([
-                ["local", ImageLocation.Local],
-                ["remote", ImageLocation.Remote],
-            ])
-        );
-
-        this.autoClassDiagramTypeOption = new PluginEnumOption<ClassDiagramType>(
-            "umlClassDiagramType",
-            "none|simple|detailed",
-            ClassDiagramType.None,
-            new Map([
-                ["none", ClassDiagramType.None],
-                ["simple", ClassDiagramType.Simple],
-                ["detailed", ClassDiagramType.Detailed],
-            ])
-        );
-
-        this.autoClassDiagramPositionOption = new PluginEnumOption<ClassDiagramPosition>(
-            "umlClassDiagramPosition",
-            "above|below",
-            ClassDiagramPosition.Below,
-            new Map([
-                ["above", ClassDiagramPosition.Above],
-                ["below", ClassDiagramPosition.Below],
-            ])
-        );
-
-        this.autoClassDiagramHideEmptyMembersOption = new PluginBooleanOption(
-            "umlClassDiagramHideEmptyMembers",
-            "true|false",
-            true
-        );
-
-        this.autoClassDiagramTopDownLayoutMaxSiblingsOption = new PluginNumberOption(
-            "umlClassDiagramTopDownLayoutMaxSiblings",
-            "An integer indicating the max number of siblings to be used with the default top down layout.",
-            6,
-            0,
-            Infinity
-        );
-
-        this.autoClassDiagramMemberVisibilityStyleOption = new PluginEnumOption<ClassDiagramMemberVisibilityStyle>(
-            "umlClassDiagramMemberVisibilityStyle",
-            "text|icon",
-            ClassDiagramMemberVisibilityStyle.Icon,
-            new Map([
-                ["text", ClassDiagramMemberVisibilityStyle.Text],
-                ["icon", ClassDiagramMemberVisibilityStyle.Icon],
-            ])
-        );
-
-        this.autoClassDiagramHideCircledCharOption = new PluginBooleanOption(
-            "umlClassDiagramHideCircledChar",
-            "true|false",
-            false
-        );
-
-        this.autoClassDiagramHideShadowOption = new PluginBooleanOption(
-            "umlClassDiagramHideShadow",
-            "true|false",
-            false
-        );
-
-        this.autoClassDiagramBoxBackgroundColorOption = new PluginStringOption(
-            "umlClassDiagramBoxBackgroundColor",
-            "transparent|#RGBHEX",
-            ""
-        );
-
-        this.autoClassDiagramBoxBorderColorOption = new PluginStringOption(
-            "umlClassDiagramBoxBorderColor",
-            "transparent|#RGBHEX",
-            ""
-        );
-
-        this.autoClassDiagramBoxBorderRadiusOption = new PluginNumberOption(
-            "umlClassDiagramBoxBorderRadius",
-            "The box border radius in pixel used when automatically creating class diagrams.",
-            0,
-            0,
-            Infinity
-        );
-
-        this.autoClassDiagramBoxBorderWidthOption = new PluginNumberOption(
-            "umlClassDiagramBoxBorderWidth",
-            "The box border width in pixel used when automatically creating class diagrams.",
-            -1, // because 0 can be used to hide borders
-            0,
-            Infinity
-        );
-
-        this.autoClassDiagramArrowColorOption = new PluginStringOption(
-            "umlClassDiagramArrowColor",
-            "transparent|#RGBHEX",
-            ""
-        );
-
-        this.autoClassDiagramClassFontNameOption = new PluginStringOption(
-            "umlClassDiagramClassFontName",
-            "The name of the font used for the class name when automatically creating class diagrams.",
-            ""
-        );
-
-        this.autoClassDiagramClassFontSizeOption = new PluginNumberOption(
-            "umlClassDiagramClassFontSize",
-            "The font size in pixel used for the class name when automatically creating class diagrams.",
-            0,
-            0,
-            Infinity
-        );
-
-        this.autoClassDiagramClassFontStyleOption = new PluginEnumOption<FontStyle>(
-            "umlClassDiagramClassFontStyle",
-            "normal|plain|italic|bold",
-            FontStyle.Undefined,
-            new Map([
-                ["normal", FontStyle.Normal],
-                ["plain", FontStyle.Plain],
-                ["italic", FontStyle.Italic],
-                ["bold", FontStyle.Bold],
-            ])
-        );
-
-        this.autoClassDiagramClassFontColorOption = new PluginStringOption(
-            "umlClassDiagramClassFontColor",
-            "transparent|#RGBHEX",
-            ""
-        );
-
-        this.autoClassDiagramClassAttributeFontNameOption = new PluginStringOption(
-            "umlClassDiagramClassAttributeFontName",
-            "The name of the font used for the class attributes when automatically creating class diagrams.",
-            ""
-        );
-
-        this.autoClassDiagramClassAttributeFontSizeOption = new PluginNumberOption(
-            "umlClassDiagramClassAttributeFontSize",
-            "The font size in pixel used for the class attributes when automatically creating class diagrams.",
-            0,
-            0,
-            Infinity
-        );
-
-        this.autoClassDiagramClassAttributeFontStyleOption = new PluginEnumOption<FontStyle>(
-            "umlClassDiagramClassAttributeFontStyle",
-            "normal|plain|italic|bold",
-            FontStyle.Undefined,
-            new Map([
-                ["normal", FontStyle.Normal],
-                ["plain", FontStyle.Plain],
-                ["italic", FontStyle.Italic],
-                ["bold", FontStyle.Bold],
-            ])
-        );
-
-        this.autoClassDiagramClassAttributeFontColorOption = new PluginStringOption(
-            "umlClassDiagramClassAttributeFontColor",
-            "transparent|#RGBHEX",
-            ""
-        );
-    }
+    private autoClassDiagramClassAttributeFontColorOption = {
+        type: ParameterType.String,
+        name: "umlClassDiagramClassAttributeFontColor",
+        help: "transparent|#RGBHEX",
+        defaultValue: "",
+        value: "",
+    };
 
     /**
      * Adds the command line options of the plugin to the TypeDoc application.
      * @param typedoc The TypeDoc application.
      */
+    // prettier-ignore
     public addToApplication(typedoc: Application): void {
-        this.outputImageFormatOption.addToApplication(typedoc);
-        this.outputImageLocationOption.addToApplication(typedoc);
-        this.autoClassDiagramTypeOption.addToApplication(typedoc);
-        this.autoClassDiagramPositionOption.addToApplication(typedoc);
-        this.autoClassDiagramHideEmptyMembersOption.addToApplication(typedoc);
-        this.autoClassDiagramTopDownLayoutMaxSiblingsOption.addToApplication(typedoc);
-        this.autoClassDiagramMemberVisibilityStyleOption.addToApplication(typedoc);
-        this.autoClassDiagramHideCircledCharOption.addToApplication(typedoc);
-        this.autoClassDiagramHideShadowOption.addToApplication(typedoc);
-        this.autoClassDiagramBoxBackgroundColorOption.addToApplication(typedoc);
-        this.autoClassDiagramBoxBorderColorOption.addToApplication(typedoc);
-        this.autoClassDiagramBoxBorderRadiusOption.addToApplication(typedoc);
-        this.autoClassDiagramBoxBorderWidthOption.addToApplication(typedoc);
-        this.autoClassDiagramArrowColorOption.addToApplication(typedoc);
-        this.autoClassDiagramClassFontNameOption.addToApplication(typedoc);
-        this.autoClassDiagramClassFontSizeOption.addToApplication(typedoc);
-        this.autoClassDiagramClassFontStyleOption.addToApplication(typedoc);
-        this.autoClassDiagramClassFontColorOption.addToApplication(typedoc);
-        this.autoClassDiagramClassAttributeFontNameOption.addToApplication(typedoc);
-        this.autoClassDiagramClassAttributeFontSizeOption.addToApplication(typedoc);
-        this.autoClassDiagramClassAttributeFontStyleOption.addToApplication(typedoc);
-        this.autoClassDiagramClassAttributeFontColorOption.addToApplication(typedoc);
+        typedoc.options.addDeclaration(this.outputImageFormatOption as MapDeclarationOption<ImageFormat>);
+        typedoc.options.addDeclaration(this.outputImageLocationOption as MapDeclarationOption<ImageLocation>);
+        typedoc.options.addDeclaration(this.autoClassDiagramTypeOption as MapDeclarationOption<ClassDiagramType>);
+        typedoc.options.addDeclaration(this.autoClassDiagramPositionOption as MapDeclarationOption<ClassDiagramPosition>);
+        typedoc.options.addDeclaration(this.autoClassDiagramHideEmptyMembersOption as BooleanDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramTopDownLayoutMaxSiblingsOption as NumberDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramMemberVisibilityStyleOption as MapDeclarationOption<ClassDiagramMemberVisibilityStyle>);
+        typedoc.options.addDeclaration(this.autoClassDiagramHideCircledCharOption as BooleanDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramHideShadowOption as BooleanDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramBoxBackgroundColorOption as StringDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramBoxBorderColorOption as StringDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramBoxBorderRadiusOption as NumberDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramBoxBorderWidthOption as NumberDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramArrowColorOption as StringDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramClassFontNameOption as StringDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramClassFontSizeOption as NumberDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramClassFontStyleOption as MapDeclarationOption<FontStyle>);
+        typedoc.options.addDeclaration(this.autoClassDiagramClassFontColorOption as StringDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramClassAttributeFontNameOption as StringDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramClassAttributeFontSizeOption as NumberDeclarationOption);
+        typedoc.options.addDeclaration(this.autoClassDiagramClassAttributeFontStyleOption as MapDeclarationOption<FontStyle>);
+        typedoc.options.addDeclaration(this.autoClassDiagramClassAttributeFontColorOption as StringDeclarationOption);
     }
 
     /**
      * Reads the values of the plugin options from the application options.
      * @param appOptions The TypeDoc application.
      */
+    // prettier-ignore
     public readValuesFromApplication(typedoc: Application): void {
-        this.outputImageFormatOption.readValueFromApplication(typedoc);
-        this.outputImageLocationOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramTypeOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramPositionOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramHideEmptyMembersOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramTopDownLayoutMaxSiblingsOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramMemberVisibilityStyleOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramHideCircledCharOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramHideShadowOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramBoxBackgroundColorOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramBoxBorderColorOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramBoxBorderRadiusOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramBoxBorderWidthOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramArrowColorOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramClassFontNameOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramClassFontSizeOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramClassFontStyleOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramClassFontColorOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramClassAttributeFontNameOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramClassAttributeFontSizeOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramClassAttributeFontStyleOption.readValueFromApplication(typedoc);
-        this.autoClassDiagramClassAttributeFontColorOption.readValueFromApplication(typedoc);
+        this.outputImageFormatOption.value = typedoc.options.getValue(this.outputImageFormatOption.name) as ImageFormat;
+        this.outputImageLocationOption.value = typedoc.options.getValue(this.outputImageLocationOption.name) as ImageLocation;
+        this.autoClassDiagramTypeOption.value = typedoc.options.getValue(this.autoClassDiagramTypeOption.name) as ClassDiagramType;
+        this.autoClassDiagramPositionOption.value = typedoc.options.getValue(this.autoClassDiagramPositionOption.name) as ClassDiagramPosition;
+        this.autoClassDiagramHideEmptyMembersOption.value = typedoc.options.getValue(this.autoClassDiagramHideEmptyMembersOption.name) as boolean;
+        this.autoClassDiagramTopDownLayoutMaxSiblingsOption.value = typedoc.options.getValue(this.autoClassDiagramTopDownLayoutMaxSiblingsOption.name) as number;
+        this.autoClassDiagramMemberVisibilityStyleOption.value = typedoc.options.getValue(this.autoClassDiagramMemberVisibilityStyleOption.name) as ClassDiagramMemberVisibilityStyle;
+        this.autoClassDiagramHideCircledCharOption.value = typedoc.options.getValue(this.autoClassDiagramHideCircledCharOption.name) as boolean;
+        this.autoClassDiagramHideShadowOption.value = typedoc.options.getValue(this.autoClassDiagramHideShadowOption.name) as boolean;
+        this.autoClassDiagramBoxBackgroundColorOption.value = typedoc.options.getValue(this.autoClassDiagramBoxBackgroundColorOption.name) as string;
+        this.autoClassDiagramBoxBorderColorOption.value = typedoc.options.getValue(this.autoClassDiagramBoxBorderColorOption.name) as string;
+        this.autoClassDiagramBoxBorderRadiusOption.value = typedoc.options.getValue(this.autoClassDiagramBoxBorderRadiusOption.name) as number;
+        this.autoClassDiagramBoxBorderWidthOption.value = typedoc.options.getValue(this.autoClassDiagramBoxBorderWidthOption.name) as number;
+        this.autoClassDiagramArrowColorOption.value = typedoc.options.getValue(this.autoClassDiagramArrowColorOption.name) as string;
+        this.autoClassDiagramClassFontNameOption.value = typedoc.options.getValue(this.autoClassDiagramClassFontNameOption.name) as string;
+        this.autoClassDiagramClassFontSizeOption.value = typedoc.options.getValue(this.autoClassDiagramClassFontSizeOption.name) as number;
+        this.autoClassDiagramClassFontStyleOption.value = typedoc.options.getValue(this.autoClassDiagramClassFontStyleOption.name) as FontStyle;
+        this.autoClassDiagramClassFontColorOption.value = typedoc.options.getValue(this.autoClassDiagramClassFontColorOption.name) as string;
+        this.autoClassDiagramClassAttributeFontNameOption.value = typedoc.options.getValue(this.autoClassDiagramClassAttributeFontNameOption.name) as string;
+        this.autoClassDiagramClassAttributeFontSizeOption.value = typedoc.options.getValue(this.autoClassDiagramClassAttributeFontSizeOption.name) as number;
+        this.autoClassDiagramClassAttributeFontStyleOption.value = typedoc.options.getValue(this.autoClassDiagramClassAttributeFontStyleOption.name) as FontStyle;
+        this.autoClassDiagramClassAttributeFontColorOption.value = typedoc.options.getValue(this.autoClassDiagramClassAttributeFontColorOption.name) as string;
     }
 
     /**
@@ -372,7 +367,7 @@ export class PlantUmlPluginOptions {
      * @returns The image format used for generating UML diagrams.
      */
     get outputImageFormat(): ImageFormat {
-        return this.outputImageFormatOption.val;
+        return this.outputImageFormatOption.value;
     }
 
     /**
@@ -380,7 +375,7 @@ export class PlantUmlPluginOptions {
      * @returns The location where the generated UML diagrams should be stored.
      */
     get outputImageLocation(): ImageLocation {
-        return this.outputImageLocationOption.val;
+        return this.outputImageLocationOption.value;
     }
 
     /**
@@ -388,7 +383,7 @@ export class PlantUmlPluginOptions {
      * @returns Whether UML class diagrams should be created automatically.
      */
     get autoClassDiagramType(): ClassDiagramType {
-        return this.autoClassDiagramTypeOption.val;
+        return this.autoClassDiagramTypeOption.value;
     }
 
     /**
@@ -396,7 +391,7 @@ export class PlantUmlPluginOptions {
      * @returns Where on the page the automatically created class diagram should be put.
      */
     get autoClassDiagramPosition(): ClassDiagramPosition {
-        return this.autoClassDiagramPositionOption.val;
+        return this.autoClassDiagramPositionOption.value;
     }
 
     /**
@@ -404,7 +399,7 @@ export class PlantUmlPluginOptions {
      * @returns Whether to hide empty properties and methods in the automatically created class diagram.
      */
     get autoClassDiagramHideEmptyMembers(): boolean {
-        return this.autoClassDiagramHideEmptyMembersOption.val;
+        return this.autoClassDiagramHideEmptyMembersOption.value;
     }
 
     /**
@@ -412,7 +407,7 @@ export class PlantUmlPluginOptions {
      * @returns The boundary before swiching from top->down to left->right direction for class diagrams.
      */
     get autoClassDiagramTopDownLayoutMaxSiblings(): number {
-        return this.autoClassDiagramTopDownLayoutMaxSiblingsOption.val;
+        return this.autoClassDiagramTopDownLayoutMaxSiblingsOption.value;
     }
 
     /**
@@ -420,7 +415,7 @@ export class PlantUmlPluginOptions {
      * @returns How the member visibility is rendered in the automatically created class diagram.
      */
     get autoClassDiagramMemberVisibilityStyle(): ClassDiagramMemberVisibilityStyle {
-        return this.autoClassDiagramMemberVisibilityStyleOption.val;
+        return this.autoClassDiagramMemberVisibilityStyleOption.value;
     }
 
     /**
@@ -428,7 +423,7 @@ export class PlantUmlPluginOptions {
      * @returns Whether to hide the circled character in front of class names for class diagrams.
      */
     get autoClassDiagramHideCircledChar(): boolean {
-        return this.autoClassDiagramHideCircledCharOption.val;
+        return this.autoClassDiagramHideCircledCharOption.value;
     }
 
     /**
@@ -436,7 +431,7 @@ export class PlantUmlPluginOptions {
      * @returns Whether to hide the shadows in the automatically created class diagram.
      */
     get autoClassDiagramHideShadow(): boolean {
-        return this.autoClassDiagramHideShadowOption.val;
+        return this.autoClassDiagramHideShadowOption.value;
     }
 
     /**
@@ -446,7 +441,7 @@ export class PlantUmlPluginOptions {
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramBoxBackgroundColor(): string {
-        return this.autoClassDiagramBoxBackgroundColorOption.val;
+        return this.autoClassDiagramBoxBackgroundColorOption.value;
     }
 
     /**
@@ -456,7 +451,7 @@ export class PlantUmlPluginOptions {
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramBoxBorderColor(): string {
-        return this.autoClassDiagramBoxBorderColorOption.val;
+        return this.autoClassDiagramBoxBorderColorOption.value;
     }
 
     /**
@@ -464,7 +459,7 @@ export class PlantUmlPluginOptions {
      * @returns The border radius that should be used for boxes in automatically created class diagrams.
      */
     get autoClassDiagramBoxBorderRadius(): number {
-        return this.autoClassDiagramBoxBorderRadiusOption.val;
+        return this.autoClassDiagramBoxBorderRadiusOption.value;
     }
 
     /**
@@ -474,7 +469,7 @@ export class PlantUmlPluginOptions {
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramBoxBorderWidth(): number {
-        return this.autoClassDiagramBoxBorderWidthOption.val;
+        return this.autoClassDiagramBoxBorderWidthOption.value;
     }
 
     /**
@@ -484,7 +479,7 @@ export class PlantUmlPluginOptions {
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramArrowColor(): string {
-        return this.autoClassDiagramArrowColorOption.val;
+        return this.autoClassDiagramArrowColorOption.value;
     }
 
     /**
@@ -494,7 +489,7 @@ export class PlantUmlPluginOptions {
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramClassFontName(): string {
-        return this.autoClassDiagramClassFontNameOption.val;
+        return this.autoClassDiagramClassFontNameOption.value;
     }
 
     /**
@@ -504,7 +499,7 @@ export class PlantUmlPluginOptions {
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramClassFontSize(): number {
-        return this.autoClassDiagramClassFontSizeOption.val;
+        return this.autoClassDiagramClassFontSizeOption.value;
     }
 
     /**
@@ -512,7 +507,7 @@ export class PlantUmlPluginOptions {
      * @returns The font style that should be used for the class name in automatically created class diagrams.
      */
     get autoClassDiagramClassFontStyle(): FontStyle {
-        return this.autoClassDiagramClassFontStyleOption.val;
+        return this.autoClassDiagramClassFontStyleOption.value;
     }
 
     /**
@@ -522,7 +517,7 @@ export class PlantUmlPluginOptions {
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramClassFontColor(): string {
-        return this.autoClassDiagramClassFontColorOption.val;
+        return this.autoClassDiagramClassFontColorOption.value;
     }
 
     /**
@@ -532,7 +527,7 @@ export class PlantUmlPluginOptions {
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramClassAttributeFontName(): string {
-        return this.autoClassDiagramClassAttributeFontNameOption.val;
+        return this.autoClassDiagramClassAttributeFontNameOption.value;
     }
 
     /**
@@ -542,7 +537,7 @@ export class PlantUmlPluginOptions {
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramClassAttributeFontSize(): number {
-        return this.autoClassDiagramClassAttributeFontSizeOption.val;
+        return this.autoClassDiagramClassAttributeFontSizeOption.value;
     }
 
     /**
@@ -550,7 +545,7 @@ export class PlantUmlPluginOptions {
      * @returns The font style that should be used for the class attributes in automatically created class diagrams.
      */
     get autoClassDiagramClassAttributeFontStyle(): FontStyle {
-        return this.autoClassDiagramClassAttributeFontStyleOption.val;
+        return this.autoClassDiagramClassAttributeFontStyleOption.value;
     }
 
     /**
@@ -560,6 +555,6 @@ export class PlantUmlPluginOptions {
      *          In this case the PlantUML default value should be used.
      */
     get autoClassDiagramClassAttributeFontColor(): string {
-        return this.autoClassDiagramClassAttributeFontColorOption.val;
+        return this.autoClassDiagramClassAttributeFontColorOption.value;
     }
 }

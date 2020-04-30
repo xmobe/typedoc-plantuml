@@ -3,7 +3,6 @@ const plantuml = require("node-plantuml"); // there are no type definitions for 
 import * as fs from "fs";
 import * as path from "path";
 import { Application, DeclarationReflection, Reflection, ReflectionKind } from "typedoc";
-import { PluginBase } from "typedoc-plugin-base/dist/plugin_base";
 import { Context, Converter } from "typedoc/dist/lib/converter";
 import { PageEvent, RendererEvent } from "typedoc/dist/lib/output/events";
 import {
@@ -38,21 +37,30 @@ import { TypeDocUtils } from "./typedoc_utils";
  *    module to generate image files out of the image URLs from step one and stores them as local files.
  *    The markdown for the images is updated respectively.
  */
-export class PlantUmlPlugin extends PluginBase {
+export class PlantUmlPlugin {
     /** The directory in which TypeDoc (and this plugin) is generating the images. */
-    protected typeDocImageDirectory!: string;
+    private typeDocImageDirectory!: string;
 
     /** Number of generated local image files. */
-    protected numberOfGeneratedImages = 0;
+    private numberOfGeneratedImages = 0;
 
     /** The options of this plugin. */
-    protected options = new PlantUmlPluginOptions();
+    private options = new PlantUmlPluginOptions();
+
+    /**
+     * Initializes the plugin.
+     * @param typedoc The TypeDoc application.
+     */
+    public initialize(typedoc: Application): void {
+        this.addOptionsToApplication(typedoc);
+        this.subscribeToApplicationEvents(typedoc);
+    }
 
     /**
      * Adds the plugin's options to the application's options.
      * @param typedoc The TypeDoc application.
      */
-    protected addOptionsToApplication(typedoc: Application): void {
+    private addOptionsToApplication(typedoc: Application): void {
         this.options.addToApplication(typedoc);
     }
 
@@ -61,7 +69,7 @@ export class PlantUmlPlugin extends PluginBase {
      * in the particular doc generation phases.
      * @param typedoc The TypeDoc application.
      */
-    protected subscribeToApplicationEvents(typedoc: Application): void {
+    private subscribeToApplicationEvents(typedoc: Application): void {
         typedoc.converter.on(Converter.EVENT_RESOLVE_BEGIN, (c: Context) => this.onConverterResolveBegin(c));
         typedoc.converter.on(Converter.EVENT_RESOLVE_END, (c: Context) => this.onConverterResolveEnd(c));
 
@@ -89,16 +97,14 @@ export class PlantUmlPlugin extends PluginBase {
 
         // go through all the reflections' comments
         for (const key in project.reflections) {
-            if (project.reflections.hasOwnProperty(key)) {
-                const reflection = project.reflections[key];
+            const reflection = project.reflections[key];
 
-                if (reflection && reflection.comment) {
-                    if (this.shouldCreateClassDiagramForReflection(reflection)) {
-                        this.insertUmlTagWithClassDiagramIntoCommentOfReflection(reflection);
-                    }
-
-                    this.handleUmlTagsInCommentOfReflection(reflection);
+            if (reflection && reflection.comment) {
+                if (this.shouldCreateClassDiagramForReflection(reflection)) {
+                    this.insertUmlTagWithClassDiagramIntoCommentOfReflection(reflection);
                 }
+
+                this.handleUmlTagsInCommentOfReflection(reflection);
             }
         }
     }
@@ -108,7 +114,7 @@ export class PlantUmlPlugin extends PluginBase {
      * @param reflection The reflection for which the question is asked.
      * @returns True, if a class diagram should be generated for the given reflection, otherwise false.
      */
-    protected shouldCreateClassDiagramForReflection(reflection: Reflection): reflection is DeclarationReflection {
+    private shouldCreateClassDiagramForReflection(reflection: Reflection): reflection is DeclarationReflection {
         if (
             (this.options.autoClassDiagramType === ClassDiagramType.Simple ||
                 this.options.autoClassDiagramType === ClassDiagramType.Detailed) &&
@@ -126,7 +132,7 @@ export class PlantUmlPlugin extends PluginBase {
      * Inserts an UML tag containing the PlantUML for a class diagram into the comment of the reflection.
      * @param reflection The reflection whoes comment should be manipulated.
      */
-    protected insertUmlTagWithClassDiagramIntoCommentOfReflection(reflection: DeclarationReflection): void {
+    private insertUmlTagWithClassDiagramIntoCommentOfReflection(reflection: DeclarationReflection): void {
         if (reflection.comment) {
             const classDiagramPlantUmlLines = this.getClassDiagramPlantUmlForReflection(reflection);
 
@@ -151,7 +157,7 @@ export class PlantUmlPlugin extends PluginBase {
      * @returns The Plant UML lines for the class diagram of the given reflection.
      *          If the given reflection is not part of an inheritance or implementation, the result is an empty array.
      */
-    protected getClassDiagramPlantUmlForReflection(reflection: DeclarationReflection): string[] {
+    private getClassDiagramPlantUmlForReflection(reflection: DeclarationReflection): string[] {
         const includeChildren = this.options.autoClassDiagramType === ClassDiagramType.Detailed;
 
         let plantUmlLines = new Array<string>();
@@ -298,7 +304,7 @@ export class PlantUmlPlugin extends PluginBase {
      * Convert UML tags within the comment of the reflection into PlantUML image links.
      * @param reflection The reflection whoes comment should be manipulated.
      */
-    protected handleUmlTagsInCommentOfReflection(reflection: Reflection): void {
+    private handleUmlTagsInCommentOfReflection(reflection: Reflection): void {
         if (reflection.comment) {
             reflection.comment.shortText = this.handleUmlTags(reflection.comment.shortText);
             reflection.comment.text = this.handleUmlTags(reflection.comment.text);
@@ -310,7 +316,7 @@ export class PlantUmlPlugin extends PluginBase {
      * @param text The text of the comment to process.
      * @returns The processed text of the comment.
      */
-    protected handleUmlTags(text: string): string {
+    private handleUmlTags(text: string): string {
         // regexp for finding UML tags
         const umlExpression = /<uml(?:\s+alt\s*=\s*['"](.+)['"]\s*)?>([\s\S]*?)<\/uml>/gi;
 
@@ -443,7 +449,7 @@ export class PlantUmlPlugin extends PluginBase {
      * @param src The image URL of the class diagram.
      * @returns The relative path to the generated image file.
      */
-    protected writeLocalImage(pageFilename: string, src: string): string {
+    private writeLocalImage(pageFilename: string, src: string): string {
         // setup plantuml encoder and decoder
         const decode = plantuml.decode(src);
         const gen = plantuml.generate({ format: this.options.outputImageFormat.toString() });

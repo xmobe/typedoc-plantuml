@@ -1,9 +1,9 @@
 {
-    "name": "typedoc-plantuml2",
-    "version": "1.0.1",
-    "description": "Plugin for TypeDoc that generates images for PlantUML diagrams embedded in comments.",
+    "name": "typedoc-plantuml-ext",
+    "version": "1.0.0",
+    "description": "An extended version of the typedoc-plantuml plugin for TypeDoc that generates images for PlantUML diagrams embedded in comments.",
     "author": {
-        "name": "Artifact Health, Inc",
+        "name": "Artifact Health, Inc and Krisztián Balla",
         "url": "http://www.artifacthealth.com"
     },
     "license": "ISC",
@@ -15,29 +15,29 @@
     ],
     "dependencies": {
         "node-plantuml": "^0.9.0",
-        "pako": "^1.0.11",
-        "typedoc-plugin-base": "^1.3.4"
+        "pako": "^1.0.11"
     },
     "devDependencies": {
-        "@types/node": "^13.11.1",
+        "@types/node": "^13.13.4",
         "@types/pako": "^1.0.1",
-        "prettier": "^2.0.4",
-        "tslint": "^6.1.1",
-        "typedoc": "^0.17.4",
+        "prettier": "^2.0.5",
+        "tslint": "^6.1.2",
+        "typedoc": "^0.17.6",
         "typescript": "^3.8.3"
     },
     "peerDependencies": {
-        "typedoc": "^0.17.4"
+        "typedoc": "^0.17.6"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/artifacthealth/typedoc-plantuml.git"
+        "url": "git+https://github.com/krisztianb/typedoc-plantuml.git"
     },
     "main": "dist/index.js",
     "files": [
         "/dist"
     ],
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "lint": "npx tslint -p .",
+        "build": "npx tsc"
     }
 }

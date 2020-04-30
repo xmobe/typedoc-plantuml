@@ -4,6 +4,7 @@
     "rules": {
         "trailing-comma": true,
         "member-ordering": false,
-        "no-bitwise": false
+        "no-bitwise": false,
+        "forin": false
     }
 }
